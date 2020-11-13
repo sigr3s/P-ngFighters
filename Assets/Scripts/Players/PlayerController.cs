@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     //  A player always faces the other player bc you know fgc
 
     public float jumpSpeed = 8.0F;
+    public float moveSpeed = 8.0F;
     public float gravity = 20.0F;
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController _charaterController = null;
@@ -59,22 +60,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        var move = m_MoveAction.ReadValue<Vector2>();
         if (_charaterController.isGrounded) {
             moveDirection.y = jumpSpeed;
         }
-        if (.triggered){
-
-        }
-
-        var move = m_MoveAction.ReadValue<Vector2>();
-
         moveDirection.y -= gravity * Time.deltaTime;
+        moveDirection.x = moveSpeed * move.x;
         _charaterController.Move(moveDirection * Time.deltaTime);
-
-        if (m_FireAction.triggered){
-             Debug.Log("ASAA");
-        }
-
-        var move = m_MoveAction.ReadValue<Vector2>();
     }
 }
