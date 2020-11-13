@@ -42,9 +42,9 @@ public class PlayerController : MonoBehaviour
     //  Block stun
     //  A player always faces the other player bc you know fgc
 
-    public float jumpSpeed = 8.0F;
-    public float moveSpeed = 8.0F;
-    public float gravity = 20.0F;
+    [SerializeField] private float jumpSpeed = 18.0F;
+    [SerializeField] private float moveSpeed = 8.0F;
+    [SerializeField] private float gravity = 40.0F;
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController _charaterController = null;
     
@@ -55,13 +55,13 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        moveDirection.y = jumpSpeed;
+        
     }
 
     void Update()
     {
         var move = m_MoveAction.ReadValue<Vector2>();
-        if (_charaterController.isGrounded) {
+        if (_charaterController.isGrounded && move.y > 0.4f) {
             moveDirection.y = jumpSpeed;
         }
         moveDirection.y -= gravity * Time.deltaTime;
