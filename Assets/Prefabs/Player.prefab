@@ -13,7 +13,11 @@ GameObject:
   - component: {fileID: 6084678683803900612}
   - component: {fileID: 6084678683803900613}
   - component: {fileID: 6084678682883664063}
+<<<<<<< HEAD
+  - component: {fileID: 1502735393}
+=======
   - component: {fileID: 1340062110917203962}
+>>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -108,13 +112,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d808943c1d76745b5171ac3cbc6d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+  jumpSpeed: 8
+  gravity: 20
+--- !u!143 &1502735393
+CharacterController:
+=======
 --- !u!114 &1340062110917203962
 MonoBehaviour:
+>>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6084678683803900618}
+<<<<<<< HEAD
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+=======
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -187,3 +211,4 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+>>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
