@@ -13,11 +13,8 @@ GameObject:
   - component: {fileID: 6084678683803900612}
   - component: {fileID: 6084678683803900613}
   - component: {fileID: 6084678682883664063}
-<<<<<<< HEAD
   - component: {fileID: 1502735393}
-=======
-  - component: {fileID: 1340062110917203962}
->>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
+  - component: {fileID: 7258452435503028159}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -112,21 +109,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d808943c1d76745b5171ac3cbc6d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  jumpSpeed: 8
-  gravity: 20
 --- !u!143 &1502735393
 CharacterController:
-=======
---- !u!114 &1340062110917203962
-MonoBehaviour:
->>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6084678683803900618}
-<<<<<<< HEAD
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -138,7 +127,13 @@ MonoBehaviour:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
-=======
+--- !u!114 &7258452435503028159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6084678683803900618}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -146,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: c7dc812cd3b1e76488109688cc91273c,
     type: 3}
-  m_NotificationBehavior: 3
+  m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -157,58 +152,9 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c03f65f8-3953-481a-8c05-2de2fb0744b8
-    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b08cc731-d5ba-4a32-84fd-189cf50b6f39
-    m_ActionName: Player/Fire[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 50998522-670d-43cc-a3ca-b9b2a20d348b
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 7fe386ba-f0a8-4a5d-b892-eb6f130d6bde
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1a33786c-75ff-4282-b073-b277cc0657e8
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8ab06346-5142-40f7-87da-e2b36d745227
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3c260a3c-96e2-4b11-a071-aafb9a05ca3f
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5a8196f8-9400-4755-a043-cff8d2b3afee
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1efdd312-f6d0-4b8a-83a5-539c32a0d238
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: cc68db0f-74b7-40aa-9b35-2a63a5e13a44
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f4d7aaf1-708f-4cb6-8d48-53448c003471
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e69e48df-5c6b-4be8-8f6c-81595beb6689
-    m_ActionName: UI/TrackedDeviceOrientation
+  m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
->>>>>>> 4f7e1ddefa61adbc8f50ed664914d5d65ce373aa
