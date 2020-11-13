@@ -5,8 +5,37 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    private PlayerInput _playerInput;
+    private PlayerInput m_PlayerInput {
+        get{
+            if(_playerInput == null){
+                _playerInput = GetComponent<PlayerInput>();
+            }
+
+            return _playerInput;
+        }
+    }
+    private InputAction m_MoveAction {
+        get{
+           return m_PlayerInput.actions["move"];
+        }
+    }
+
+    private InputAction m_JumpAction {
+        get{
+           return m_PlayerInput.actions["jump"];
+        }
+    }
+
+    private InputAction m_FireAction{
+        get{
+            return m_PlayerInput.actions["fire"];
+        }
+    }
+
     // A player can:
     //  Move wasd arrows etc
     //  Attack something
@@ -41,5 +70,11 @@ public class PlayerController : MonoBehaviour
 
         moveDirection.y -= gravity * Time.deltaTime;
         _charaterController.Move(moveDirection * Time.deltaTime);
+
+        if (m_FireAction.triggered){
+             Debug.Log("ASAA");
+        }
+
+        var move = m_MoveAction.ReadValue<Vector2>();
     }
 }
