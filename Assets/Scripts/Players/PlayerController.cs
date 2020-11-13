@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     //  Attack something ~
     //  Block stun
     //  A player always faces the other player bc you know fgc
-    
+
     private PlayerInput _playerInput;
     private PlayerInput m_PlayerInput {
         get{
