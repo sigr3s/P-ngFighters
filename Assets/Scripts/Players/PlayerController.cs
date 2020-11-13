@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerInput m_PlayerInput {
         get{
-            if(_playerInput){
+            if(_playerInput == null){
                 _playerInput = GetComponent<PlayerInput>();
             }
 
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (m_FireAction.triggered){
-             
+             Debug.Log("ASAA");
         }
 
         var move = m_MoveAction.ReadValue<Vector2>();
