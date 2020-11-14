@@ -24,7 +24,7 @@ public class HazardSpawner : MonoBehaviour {
 
     // Out of start
     private void Start() {
-        if(DataUtility.gameData.isNetworkedGame && !PhotonNetwork.IsMasterClient){
+        if(DataUtility.gameData.isNetworkedGame){
            if(!PhotonNetwork.IsMasterClient) return;
            
             for(int i = 0; i < hazardSpawnPoints.Count; i ++){
