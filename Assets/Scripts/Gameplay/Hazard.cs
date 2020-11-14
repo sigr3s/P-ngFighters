@@ -22,6 +22,9 @@ public class Hazard : MonoBehaviour
     public LayerMask Vertical;
     public LayerMask Weapon;
     public LayerMask Player;
+
+    [SerializeField] private List<PowerUP> powerUps = new List<PowerUP>();
+    
     private RaycastHit[] hits = new RaycastHit[10];
     private int hitCount = 0;
     private HazardSpawner spawner;
@@ -120,12 +123,17 @@ public class Hazard : MonoBehaviour
             return false;
         }
 
+        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.75f;
+        int powerUp = UnityEngine.Random.Range(0, powerUps.Count);
+
         if(DataUtility.gameData.isNetworkedGame){
-            Debug.Log("Call this?");
-            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
+            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player, generatePowerUp , powerUp);
             return true;
         }   
         else{
+            if(generatePowerUp){
+                Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
+            }
             gameObject.SetActive(false);
             spawner.HazardDestroyed(HazardLevel, transform, player);
             spawner.Return(this);
@@ -155,10 +163,14 @@ public class Hazard : MonoBehaviour
 
     #region PUN methods   
     [PunRPC]
-    protected void RPC_DestroyHazard(PlayerID player)
+    protected void RPC_DestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
     {        
-        Debug.Log("XDD?");
         spawner?.HazardDestroyed(HazardLevel, transform, player);
+
+        if(generatePowerUp){
+            Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
 

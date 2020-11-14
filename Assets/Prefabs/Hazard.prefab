@@ -126,3 +126,6 @@ MonoBehaviour:
   Player:
     serializedVersion: 2
     m_Bits: 1024
+  powerUps:
+  - {fileID: 6593416595631463528, guid: 2ed63d000987d8148bdd3cd8340fe19e, type: 3}
+  - {fileID: 7117331155366580572, guid: f38c784ae26e03441ac39ad4cd75f1e4, type: 3}
