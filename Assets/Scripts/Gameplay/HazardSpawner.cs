@@ -54,8 +54,6 @@ public class HazardSpawner : MonoBehaviour {
 
     public void HazardDestroyed(int hl, Transform t){
 
-        Debug.Log("HEY?");
-        
         if(hl == 1){
             lvl1Destroyed++;
         }
@@ -71,6 +69,12 @@ public class HazardSpawner : MonoBehaviour {
         if(lvl1Destroyed == Math.Pow(2, hazardLevel -1)){
             var h = GetPooledHazard();
             h.Initialize(this, hazardLevel, hazardSpawnPoints[UnityEngine.Random.Range(0, hazardSpawnPoints.Count)]);
+            lvl1Destroyed = 0;
         }   
+    }
+
+    public void Return(Hazard hazard)
+    {
+        hazardPool.Enqueue(hazard);
     }
 }

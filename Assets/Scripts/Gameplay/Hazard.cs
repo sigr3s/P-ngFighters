@@ -62,10 +62,10 @@ public class Hazard : MonoBehaviour
 
                 if(Horizontal == (Horizontal | (1 << h.collider.gameObject.layer))){
                     if(h.collider.gameObject.tag == "Ceiling"){
-                        ySpeed = gravity * bounceFactor * Mathf.Sign(h.transform.forward.y);
+                        ySpeed = gravity * (bounceFactor*HazardLevel) * Mathf.Sign(h.transform.forward.y);
                     }
                     else{
-                        ySpeed = -gravity * bounceFactor * Mathf.Sign(h.transform.forward.y);
+                        ySpeed = -gravity * (bounceFactor*HazardLevel) * Mathf.Sign(h.transform.forward.y);
                     }
 
 
@@ -76,9 +76,9 @@ public class Hazard : MonoBehaviour
                     transform.position += new Vector3(2* xSpeed * Time.deltaTime, 0f, 0f);
                 }
                 else if(Weapon == (Weapon | (1 << h.collider.gameObject.layer))){
+                    alive = false;
                     h.collider.gameObject.SetActive(false);
                     DestroyHazard();
-                    Destroy(h.collider.gameObject);
                     return;
                 }
                 else if(Player == (Player | (1 << h.collider.gameObject.layer))){
@@ -98,9 +98,8 @@ public class Hazard : MonoBehaviour
     }
 
     private void DestroyHazard(){
-        alive = false;
         gameObject.SetActive(false);
         spawner.HazardDestroyed(HazardLevel, transform);
-        Destroy(gameObject);
+        spawner.Return(this);
     }
 }

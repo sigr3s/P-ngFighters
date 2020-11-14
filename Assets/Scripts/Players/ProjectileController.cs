@@ -31,4 +31,8 @@ public class ProjectileController : MonoBehaviour
             // FIXME: Handle player here
         }
     }
+
+    private void OnDisable() {
+        alive = false;
+    }
 }
