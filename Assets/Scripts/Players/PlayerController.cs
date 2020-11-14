@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -55,21 +56,21 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController _charaterController = null;
 
-    private bool isOwner = true;
+    private bool isLocal = true;
+    private bool initialized = false;
 
-    public void Initialize(PlayerID ID, Color PlayerColor, bool isOwner){ //TODO: Sync with alex on owner?
-
-    }
-    
-    void Awake()
-    {
+    public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
+        this.playerID = playerID;
+        this.isLocal = isLocal;
         _charaterController = GetComponent<CharacterController>();
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
+        initialized = true;
+
     }
 
     void Update()
     {
-        if(!isOwner){
+        if(!isLocal || !initialized){
             return;
         }
 
@@ -94,6 +95,13 @@ public class PlayerController : MonoBehaviour
         }
         _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
         _currentShot.shooter = playerID;   
+    }
+
+    public void Damage()
+    {
+        if(isLocal){
+            Debug.Log("Au");
+        }
     }
 }
 

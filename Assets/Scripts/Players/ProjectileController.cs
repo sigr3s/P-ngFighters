@@ -29,13 +29,16 @@ public class ProjectileController : MonoBehaviour
             gameObject.SetActive(false);
         }
         else{
-            if(collision.collider.TryGetComponent<Hazard>(out Hazard h)){   
-                if(h.TryDestroyHazard(shooter)){
-                    alive = false;
-                    gameObject.SetActive(false);
-                }
-            }
             // FIXME: Handle player here
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
+            if(h.TryDestroyHazard(shooter)){
+                alive = false;
+                gameObject.SetActive(false);
+            }
         }
     }
 

@@ -72,7 +72,9 @@ public class Hazard : MonoBehaviour
                     transform.position += new Vector3(2* xSpeed * Time.deltaTime, 0f, 0f);
                 }
                 else if(Player == (Player | (1 << h.collider.gameObject.layer))){
-                    Debug.Log("Player?");
+                    if(h.collider.gameObject.TryGetComponent<PlayerController>(out PlayerController pc)){   
+                        pc.Damage();
+                    }
                     return;   
                 }
                 else{
