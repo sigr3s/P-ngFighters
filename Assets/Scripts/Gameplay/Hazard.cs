@@ -48,6 +48,16 @@ public class Hazard : MonoBehaviour
     private void Update() {
         if(!alive) return;
 
+        if(DataUtility.gameData.isNetworkedGame){
+            Debug.LogWarning("Hazard position does not work on net -- updated on both sides? Fuck async?");
+        }
+        else{
+            UpdatePosition();
+        }
+       
+    }
+
+    private void UpdatePosition(){
         transform.position += new Vector3(xSpeed * Time.deltaTime * HazardSimulationRate, ySpeed * Time.deltaTime * HazardSimulationRate, 0f);
 
         hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
@@ -72,15 +82,6 @@ public class Hazard : MonoBehaviour
                 else if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
                     xSpeed *= -1;
                     transform.position += new Vector3(2* xSpeed * Time.deltaTime * HazardSimulationRate, 0f, 0f);
-                }
-                else if(Player == (Player | (1 << h.collider.gameObject.layer))){
-                    if(h.collider.gameObject.TryGetComponent<PlayerController>(out PlayerController pc)){   
-                        pc.Damage();
-                    }
-                    continue;   
-                }
-                else{
-                    continue;
                 }
             }
         }

@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour {
     public virtual void InstantiatePlayers(){
 
         if(DataUtility.gameData.isNetworkedGame){
-
+            Debug.LogWarning("NETWORK SPAWN PLAYERS GOES HERE!");
         }
         else{
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,

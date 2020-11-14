@@ -23,21 +23,37 @@ public class ProjectileController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Ceiling")
-        {
-            alive = false;
-            gameObject.SetActive(false);
+        if(DataUtility.gameData.isNetworkedGame){
+            Debug.LogWarning("Collision for shot not implemented on network");
         }
         else{
-            // FIXME: Handle player here
+
+            if(DataUtility.gameData.isNetworkedGame){
+                Debug.LogWarning("Handle net collisions");
+            }
+            else{
+                if (collision.collider.tag == "Ceiling")
+                {
+                    alive = false;
+                    gameObject.SetActive(false);
+                }
+                else{
+                    // FIXME: Handle player here
+                }
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
-            if(h.TryDestroyHazard(shooter)){
-                alive = false;
-                gameObject.SetActive(false);
+        if(DataUtility.gameData.isNetworkedGame){
+            Debug.LogWarning("Trigger for shot not implemented on network");
+        }
+        else{
+            if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
+                if(h.TryDestroyHazard(shooter)){
+                    alive = false;
+                    gameObject.SetActive(false);
+                }
             }
         }
     }
