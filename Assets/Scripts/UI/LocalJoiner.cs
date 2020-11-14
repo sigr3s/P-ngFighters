@@ -9,10 +9,10 @@ using UnityEngine.UI;
 
 public class LocalJoiner : MonoBehaviour
 {
-    [SerializeField] private Transform content;
-    [SerializeField] private GameObject prefab;
-    [SerializeField] private GameObject startGame;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Transform content = null;
+    [SerializeField] private GameObject prefab = null;
+    [SerializeField] private GameObject startGame = null;
+    [SerializeField] private CanvasGroup canvasGroup = null;
 
     private Dictionary<InputDevice, GameObject> UIDevices = new Dictionary<InputDevice, GameObject>();
     private bool gameLoading = false;

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public class DataUtility : MonoBehaviour {
-    [SerializeField] private GameData m_gameData;
+    [SerializeField] private GameData m_gameData = null;
 
 
     public static GameData gameData = default(GameData);
