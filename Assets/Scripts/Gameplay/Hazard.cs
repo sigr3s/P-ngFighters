@@ -58,10 +58,10 @@ public class Hazard : MonoBehaviour
 
                 if(Horizontal == (Horizontal | (1 << h.collider.gameObject.layer))){
                     if(h.collider.gameObject.tag == "Ceiling"){
-                        ySpeed = gravity * (bounceFactor*HazardLevel) * Mathf.Sign(h.transform.forward.y);
+                        ySpeed = gravity * Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
                     }
                     else{
-                        ySpeed = -gravity * (bounceFactor*HazardLevel) * Mathf.Sign(h.transform.forward.y);
+                        ySpeed = -gravity *  Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
                     }
 
 
