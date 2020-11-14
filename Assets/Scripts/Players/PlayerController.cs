@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
     private bool isLocal = true;
     private bool initialized = false;
 
+    PhotonView photonView;
+
     public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
         this.isLocal = isLocal;
@@ -70,6 +73,11 @@ public class PlayerController : MonoBehaviour
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
         _moveDirection = Vector3.zero;
+
+        if(DataUtility.gameData.isNetworkedGame)
+        {
+            if(photonView == null){ photonView = GetComponentInChildren<PhotonView>(); }
+        }
     }
 
     void Update()
@@ -100,17 +108,25 @@ public class PlayerController : MonoBehaviour
 
     private void ShootProjectile()
     {
-        if(DataUtility.gameData.isNetworkedGame){
-            //RWT call?
+        if(DataUtility.gameData.isNetworkedGame)
+        {
+            PunTools.PhotonRpcMine(photonView, "RPC_ShootProjectile", RpcTarget.AllBuffered);
         }
-        else{
-            if (_currentShot != null) {
-                Destroy(_currentShot.gameObject);
-            }
-            _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
-            _currentShot.shooter = playerID;   
+        else
+        {
+            InternalShootProjectile(); 
         }
     }
+    
+    private void InternalShootProjectile()
+    {
+        if (_currentShot != null) {
+            Destroy(_currentShot.gameObject);
+        }
+        _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
+        _currentShot.shooter = playerID;   
+    }
+
 
     public void Damage()
     {
@@ -128,6 +144,14 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+
+    #region PUN methods   
+    [PunRPC]
+    protected void RPC_ShootProjectile()
+    {        
+        InternalShootProjectile();
+    }
+    #endregion
 }
 
 public enum PlayerID{
