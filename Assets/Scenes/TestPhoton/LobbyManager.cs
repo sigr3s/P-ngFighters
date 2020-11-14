@@ -20,7 +20,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField createOrJoinCustomRoomInputField = null;
     [SerializeField] GameObject waitingLabel = null;
     string roomName;
-    string gameScene = "TestGame";
+    string gameScene = "Game";
     #endregion
 
     #region Unity methods
@@ -49,7 +49,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     void AddListeners()
     {
         RemoveListeners();
-        onlineModeButton.onClick.AddListener(ShowLobbyUi);
+        onlineModeButton.onClick.AddListener(OnlineModeSelected);
         localModeButton.onClick.AddListener(LocalModeSelected);
 
         joinRandomRoomButton.onClick.AddListener(JoinRandomRoom);
@@ -61,7 +61,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void RemoveListeners()
     {
-        onlineModeButton.onClick.RemoveListener(ShowLobbyUi);
+        onlineModeButton.onClick.RemoveListener(OnlineModeSelected);
         localModeButton.onClick.RemoveListener(LocalModeSelected);
 
         joinRandomRoomButton.onClick.RemoveListener(JoinRandomRoom);
@@ -70,8 +70,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         closeButton.onClick.RemoveListener(CancelJoin);
     }
 
-    void ShowLobbyUi()
+    void OnlineModeSelected()
     {
+        DataUtility.gameData.isNetworkedGame = true;
         modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = false;
         modeSelectionUi.DOFade(0, 0.5f);
         lobbyUi.DOFade(1, 0.5f).OnComplete(() => lobbyUi.interactable = lobbyUi.blocksRaycasts = true );
@@ -79,7 +80,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void LocalModeSelected()
     {
-        Debug.Log("Local mode selected");
         modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = false;
         modeSelectionUi.DOFade(0, 0.5f);
         localUi.DOFade(1, 0.5f).OnComplete(() => localUi.interactable = localUi.blocksRaycasts = true );

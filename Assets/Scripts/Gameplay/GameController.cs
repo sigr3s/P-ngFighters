@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour {
 
     [Header("Network")]
     string pathRelativeToResources = "PhotonPrefabs";
-    string prefabName => "PhotonDummyPlayer";
+    string prefabName => "PunPlayer";
 
     [Header("Local")]
     public GameObject PlayerPrefab;
@@ -49,7 +49,8 @@ public class GameController : MonoBehaviour {
     {
         if(DataUtility.gameData.isNetworkedGame){
             Debug.LogWarning("NETWORK SPAWN PLAYERS GOES HERE!");
-            PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), Vector3.zero, Quaternion.identity);
+            var player1 = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), Player1Spawn.transform.position, Quaternion.identity);
+            player1.GetComponentInChildren<PlayerController>().Initialize(PlayerID.Player1, true);
         }
         else {
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,

@@ -45,16 +45,9 @@ public class Hazard : MonoBehaviour
 
     private Vector3 prevPosition = Vector3.zero;
 
-    private void Update() {
-        if(!alive) return;
-
-        if(DataUtility.gameData.isNetworkedGame){
-            Debug.LogWarning("Hazard position does not work on net -- updated on both sides? Fuck async?");
-        }
-        else{
-            UpdatePosition();
-        }
-       
+    private void Update() 
+    {
+        if(alive){ UpdatePosition(); }
     }
 
     private void UpdatePosition(){
