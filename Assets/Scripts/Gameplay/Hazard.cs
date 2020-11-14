@@ -75,7 +75,7 @@ public class Hazard : MonoBehaviour
                     if(h.collider.gameObject.TryGetComponent<PlayerController>(out PlayerController pc)){   
                         pc.Damage();
                     }
-                    return;   
+                    continue;   
                 }
                 else{
                     continue;
