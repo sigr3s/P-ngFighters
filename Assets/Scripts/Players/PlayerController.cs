@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
     private bool initialized = false;
 
     PhotonView photonView;
+    public bool instantShoot = false;
 
     public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
@@ -107,7 +108,12 @@ public class PlayerController : MonoBehaviour
         _charaterController.Move(_moveDirection * Time.deltaTime);
         // Fire
         if (m_FireAction.triggered) {
-            if (_currentShot == null || !_currentShot.alive) ShootProjectile();
+            if (_currentShot == null || !_currentShot.alive){
+                ShootProjectile();
+            }
+            else if(instantShoot){
+                ShootProjectile();
+            }
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
