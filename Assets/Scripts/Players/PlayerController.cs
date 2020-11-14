@@ -166,6 +166,19 @@ public class PlayerController : MonoBehaviour
                 Damage(20.0f);
         }
     }
+
+    private void OnTriggerStay(Collider other) {
+        //Damage, Powe UP
+        if(DataUtility.gameData.isNetworkedGame) {
+            //RWT call?
+        }
+        else {
+            Hazard hazard = other.gameObject.GetComponent<Hazard>();
+            if (hazard != null && hazard.hazardOwner == playerID) 
+                hazard.Throw();
+        }
+    }
+
     private void SwitchOfInv()
     {
         invulnerable = false;

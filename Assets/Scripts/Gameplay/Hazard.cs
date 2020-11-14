@@ -97,4 +97,9 @@ public class Hazard : MonoBehaviour
         }
     }
 
+    public void Throw()
+    {
+        
+    }
+
 }
