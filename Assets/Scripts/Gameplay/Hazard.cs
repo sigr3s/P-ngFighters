@@ -36,6 +36,10 @@ public class Hazard : MonoBehaviour
         spawner = hazardSpawner;
 
         if(DataUtility.gameData.isNetworkedGame){
+            if(view == null){
+                view = GetComponent<PhotonView>();
+            }
+            
             PunTools.PhotonRpcMine(view, "RPC_Initialize", RpcTarget.AllBuffered, level, t.position, owner, dir);
         }
         else{
