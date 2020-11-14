@@ -54,8 +54,8 @@ public class LocalJoiner : MonoBehaviour
         if(!gameLoading && startGame.activeSelf){
             gameLoading = true;
             DataUtility.gameData.isNetworkedGame = false;
-            SceneManager.LoadSceneAsync("Game");
             startAction.Disable();
+            SceneManager.LoadScene("Game");
         }
 
     }
