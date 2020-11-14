@@ -132,6 +132,8 @@ public class PlayerController : MonoBehaviour
         }
         _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
         _currentShot.shooter = playerID;
+        if(photonView == null){ photonView = GetComponentInChildren<PhotonView>(); }
+        
         if(photonView){
             _currentShot.owner = photonView.AmOwner ? this : null;   
         }

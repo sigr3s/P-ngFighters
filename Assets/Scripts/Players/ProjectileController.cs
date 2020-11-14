@@ -39,9 +39,14 @@ public class ProjectileController : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         if(DataUtility.gameData.isNetworkedGame){
-            if(owner != null && other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
-                if(h.TryDestroyHazard(shooter)){
-                   Disable();
+            if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
+                if(owner != null){
+                    if(h.TryDestroyHazard(shooter)){
+                    Disable();
+                    }
+                }
+                else{
+                    Debug.LogWarning("You not owner huh>?");
                 }
             }
         }

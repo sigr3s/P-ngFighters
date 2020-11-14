@@ -111,14 +111,7 @@ public class Hazard : MonoBehaviour
         if(player == hazardOwner) return false;
 
         if(DataUtility.gameData.isNetworkedGame){
-            if(PhotonNetwork.IsMasterClient){
-                spawner.HazardDestroyed(HazardLevel, transform, player);
-                Destroy(gameObject);
-            }
-            else{
-                PunTools.PhotonRpcMine(view, "RPC_DestroyHazard", RpcTarget.MasterClient, player);
-            }
-
+            PunTools.PhotonRpcMine(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
             return true;
         }   
         else{
@@ -138,7 +131,7 @@ public class Hazard : MonoBehaviour
     [PunRPC]
     protected void RPC_DestroyHazard(PlayerID player)
     {        
-        spawner.HazardDestroyed(HazardLevel, transform, player);
+        spawner?.HazardDestroyed(HazardLevel, transform, player);
         Destroy(gameObject);
     }
 
