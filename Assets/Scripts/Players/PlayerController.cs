@@ -45,6 +45,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public Action OnUIShouldUpdate;
+
+    // Attributes
+    public float health = 100.0f;
+    public float super = 0.0f;
+    public bool invulnerable = false;
     [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
     [SerializeField] private float moveSpeed = 8.0F;
@@ -128,21 +134,34 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public void Damage()
+    public void Damage(float amount)
     {
         if(isLocal){
-            //Debug.Log("Au");
+            if (!invulnerable)
+            {
+                Debug.Log("Au!");
+                health -= amount;
+                OnUIShouldUpdate?.Invoke();
+                invulnerable = true;
+                Invoke("SwitchOfInv", 2.0f);
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other) {
         //Damage, Powe UP
-        if(DataUtility.gameData.isNetworkedGame){
+        if(DataUtility.gameData.isNetworkedGame) {
             //RWT call?
         }
-        else{
-
+        else {
+            Hazard hazard = other.gameObject.GetComponent<Hazard>();
+            if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP) 
+                Damage(20.0f);
         }
+    }
+    private void SwitchOfInv()
+    {
+        invulnerable = false;
     }
 
     #region PUN methods   
