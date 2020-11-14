@@ -8,44 +8,49 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    // A player can:
+    //  Move wasd arrows etc x
+    //  Attack something ~
+    //  Block stun
+    //  A player always faces the other player bc you know fgc
+
     private PlayerInput _playerInput;
     private PlayerInput m_PlayerInput {
         get{
-            if(_playerInput == null){
+            if(_playerInput == null) {
                 _playerInput = GetComponent<PlayerInput>();
             }
-
             return _playerInput;
         }
     }
     private InputAction m_MoveAction {
-        get{
+        get {
            return m_PlayerInput.actions["move"];
         }
     }
 
     private InputAction m_JumpAction {
-        get{
+        get {
            return m_PlayerInput.actions["jump"];
         }
     }
 
     private InputAction m_FireAction{
-        get{
+        get {
             return m_PlayerInput.actions["fire"];
         }
     }
 
-    // A player can:
-    //  Move wasd arrows etc
-    //  Attack something
-    //  Block stun
-    //  A player always faces the other player bc you know fgc
-
+    [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
     [SerializeField] private float moveSpeed = 8.0F;
     [SerializeField] private float gravity = 40.0F;
-    private Vector3 moveDirection = Vector3.zero;
+    private Vector3 _moveDirection = Vector3.zero;
+    [Header("Projectiles")]
+    [SerializeField] private GameObject projectilePrefab = null;
+    [SerializeField] private Transform projectileOrigin = null;
+    private ProjectileController _currentShot = null;
+
     private CharacterController _charaterController = null;
     
     void Awake()
@@ -53,19 +58,27 @@ public class PlayerController : MonoBehaviour
         _charaterController = GetComponent<CharacterController>();
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
+        // Movement
         var move = m_MoveAction.ReadValue<Vector2>();
         if (_charaterController.isGrounded && move.y > 0.4f) {
-            moveDirection.y = jumpSpeed;
+            _moveDirection.y = jumpSpeed;
         }
-        moveDirection.y -= gravity * Time.deltaTime;
-        moveDirection.x = moveSpeed * move.x;
-        _charaterController.Move(moveDirection * Time.deltaTime);
+        _moveDirection.y -= gravity * Time.deltaTime;
+        _moveDirection.x = moveSpeed * move.x;
+        _charaterController.Move(_moveDirection * Time.deltaTime);
+        // Fire
+        if (m_FireAction.triggered) {
+            if (_currentShot == null || !_currentShot.alive) ShootProjectile();
+        }
+    }
+
+    private void ShootProjectile()
+    {
+        if (_currentShot != null) {
+            Destroy(_currentShot.gameObject);
+        }
+        _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
     }
 }

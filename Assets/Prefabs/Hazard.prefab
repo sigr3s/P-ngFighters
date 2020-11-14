@@ -107,10 +107,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hazardTarget: 0
-  EnemyLevel: 4
   gravity: -5
   speed: 7
-  bounceFactor: 1.9
+  bounceFactor: 2.21
+  scaleFactor: 1.15
   mask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -120,3 +120,9 @@ MonoBehaviour:
   Vertical:
     serializedVersion: 2
     m_Bits: 256
+  Weapon:
+    serializedVersion: 2
+    m_Bits: 2048
+  Player:
+    serializedVersion: 2
+    m_Bits: 1024
