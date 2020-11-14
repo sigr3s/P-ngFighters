@@ -23,7 +23,9 @@ public class DataUtility : MonoBehaviour {
 
 
     private void Awake() {
-        UpdateData();
+        if(DataUtility.gameData == null) {
+            UpdateData();
+        }
     }
 
     private void UpdateData(){
