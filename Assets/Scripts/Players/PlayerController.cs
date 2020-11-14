@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
     public void DestroyHazard(Hazard h)
     {
-        PunTools.PhotonRpcMine(photonView, "RPC_DestroyHazard", RpcTarget.AllBuffered, h);
+        Debug.LogError("@Lex??");
     }
 
 
@@ -176,14 +176,6 @@ public class PlayerController : MonoBehaviour
     protected void RPC_ShootProjectile()
     {        
         InternalShootProjectile();
-    }
-
-    [PunRPC]
-    protected void RPC_DestroyHazard(Hazard h)
-    {        
-        if(h.TryDestroyHazard(playerID)){
-            _currentShot?.Disable();
-        }
     }
     #endregion
 }
