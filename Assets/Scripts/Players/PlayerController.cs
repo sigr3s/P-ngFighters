@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     public bool invulnerable = false;
     [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
+
+
     [SerializeField] private float moveSpeed = 8.0F;
     [SerializeField] private float gravity = 40.0F;
     private Vector3 _moveDirection = Vector3.zero;
@@ -129,7 +131,13 @@ public class PlayerController : MonoBehaviour
             Destroy(_currentShot.gameObject);
         }
         _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
-        _currentShot.shooter = playerID;   
+        _currentShot.shooter = playerID;
+        _currentShot.owner = photonView.AmOwner ? this : null;   
+    }
+
+    public void DestroyHazard(Hazard h)
+    {
+        PunTools.PhotonRpcMine(photonView, "RPC_DestroyHazard", RpcTarget.AllBuffered, h);
     }
 
 
@@ -168,6 +176,14 @@ public class PlayerController : MonoBehaviour
     protected void RPC_ShootProjectile()
     {        
         InternalShootProjectile();
+    }
+
+    [PunRPC]
+    protected void RPC_DestroyHazard(Hazard h)
+    {        
+        if(h.TryDestroyHazard(playerID)){
+            _currentShot?.Disable();
+        }
     }
     #endregion
 }

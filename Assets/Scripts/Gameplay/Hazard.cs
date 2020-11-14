@@ -96,4 +96,5 @@ public class Hazard : MonoBehaviour
             return false;
         }
     }
+
 }

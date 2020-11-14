@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class ProjectileController : MonoBehaviour
     private Vector3 _moveDirection = Vector3.zero;
     public bool alive = true;
     public PlayerID shooter = PlayerID.NP;
+    public PlayerController owner = null;
 
     void Start()
     {
@@ -36,12 +38,23 @@ public class ProjectileController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
-            if(h.TryDestroyHazard(shooter)){
-                alive = false;
-                gameObject.SetActive(false);
+        if(DataUtility.gameData.isNetworkedGame){
+            if(owner != null && other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
+                owner.DestroyHazard(h);
             }
         }
+        else{
+            if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
+                if(h.TryDestroyHazard(shooter)){
+                   Disable();
+                }
+            }
+        }
+    }
+
+    public void Disable(){
+        alive = false;
+        gameObject.SetActive(false);
     }
 
     private void OnDisable() {
