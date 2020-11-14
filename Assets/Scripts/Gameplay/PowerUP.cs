@@ -51,6 +51,8 @@ public class PowerUP : MonoBehaviour
                     if(Horizontal == (Horizontal | (1 << h.collider.gameObject.layer))){
                         ySpeed = 0;
                     }
+
+                    //FIXME: TEST?
                     else if(Player.value == (Player.value | (1 << h.collider.gameObject.layer))){
                         if(h.collider.gameObject.TryGetComponent<PlayerController>(out playerController)){   
                             interactable = false;

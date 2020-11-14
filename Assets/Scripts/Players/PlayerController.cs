@@ -100,17 +100,32 @@ public class PlayerController : MonoBehaviour
 
     private void ShootProjectile()
     {
-        if (_currentShot != null) {
-            Destroy(_currentShot.gameObject);
+        if(DataUtility.gameData.isNetworkedGame){
+            //RWT call?
         }
-        _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
-        _currentShot.shooter = playerID;   
+        else{
+            if (_currentShot != null) {
+                Destroy(_currentShot.gameObject);
+            }
+            _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
+            _currentShot.shooter = playerID;   
+        }
     }
 
     public void Damage()
     {
         if(isLocal){
             //Debug.Log("Au");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        //Damage, Powe UP
+        if(DataUtility.gameData.isNetworkedGame){
+            //RWT call?
+        }
+        else{
+
         }
     }
 }
