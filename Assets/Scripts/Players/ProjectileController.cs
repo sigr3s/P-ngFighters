@@ -42,7 +42,7 @@ public class ProjectileController : MonoBehaviour
             if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
                 if(owner != null){
                     if(h.TryDestroyHazard(shooter)){
-                    Disable();
+                        Disable();
                     }
                 }
                 else{

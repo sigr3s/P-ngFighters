@@ -108,7 +108,10 @@ public class Hazard : MonoBehaviour
     }
 
     public bool TryDestroyHazard(PlayerID player){
-        if(player == hazardOwner) return false;
+        if(player == hazardOwner){ 
+            Debug.Log("Can not destroy?");
+            return false;
+        }
 
         if(DataUtility.gameData.isNetworkedGame){
             PunTools.PhotonRpcMine(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
@@ -131,6 +134,7 @@ public class Hazard : MonoBehaviour
     [PunRPC]
     protected void RPC_DestroyHazard(PlayerID player)
     {        
+        Debug.Log("XDD?");
         spawner?.HazardDestroyed(HazardLevel, transform, player);
         Destroy(gameObject);
     }
