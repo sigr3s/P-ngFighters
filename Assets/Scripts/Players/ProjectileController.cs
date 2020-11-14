@@ -11,7 +11,7 @@ public class ProjectileController : MonoBehaviour
 
     void Start()
     {
-        _moveDirection.y = 15.0f;
+        _moveDirection.y = 10.0f;
     }
 
     void Update()

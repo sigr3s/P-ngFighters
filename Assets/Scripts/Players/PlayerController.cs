@@ -90,6 +90,8 @@ public class PlayerController : MonoBehaviour
         if (m_FireAction.triggered) {
             if (_currentShot == null || !_currentShot.alive) ShootProjectile();
         }
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
     }
 
     private void ShootProjectile()
