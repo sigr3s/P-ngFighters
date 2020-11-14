@@ -115,7 +115,7 @@ public class Hazard : MonoBehaviour
 
         if(DataUtility.gameData.isNetworkedGame){
             Debug.Log("Call this?");
-            PunTools.PhotonRpcMineAndMaster(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
+            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
             return true;
         }   
         else{
