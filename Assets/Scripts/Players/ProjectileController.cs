@@ -40,7 +40,9 @@ public class ProjectileController : MonoBehaviour
     {
         if(DataUtility.gameData.isNetworkedGame){
             if(owner != null && other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
-                owner.DestroyHazard(h);
+                if(h.TryDestroyHazard(shooter)){
+                   Disable();
+                }
             }
         }
         else{

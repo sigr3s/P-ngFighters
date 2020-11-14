@@ -135,11 +135,6 @@ public class PlayerController : MonoBehaviour
         _currentShot.owner = photonView.AmOwner ? this : null;   
     }
 
-    public void DestroyHazard(Hazard h)
-    {
-        PunTools.PhotonRpcMine(photonView, "RPC_DestroyHazard", RpcTarget.AllBuffered, h);
-    }
-
 
     public void Damage(float amount)
     {
@@ -189,14 +184,6 @@ public class PlayerController : MonoBehaviour
     protected void RPC_ShootProjectile()
     {        
         InternalShootProjectile();
-    }
-
-    [PunRPC]
-    protected void RPC_DestroyHazard(Hazard h)
-    {        
-        if(h.TryDestroyHazard(playerID)){
-            _currentShot?.Disable();
-        }
     }
     #endregion
 }

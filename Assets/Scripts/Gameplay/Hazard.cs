@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Hazard : MonoBehaviour
@@ -27,30 +28,47 @@ public class Hazard : MonoBehaviour
     private bool alive = false;
 
     public static float HazardSimulationRate = 1f;
+
+    PhotonView view;
     
     public void Initialize(HazardSpawner hazardSpawner, int level, Transform t, PlayerID owner = PlayerID.NP, float dir = 1)
     {
-        gameObject.SetActive(true);
-        transform.localScale = level*scaleFactor*Vector3.one;
-        transform.position = t.position;
-        xSpeed = speed * dir;
-        ySpeed = gravity;
-        HazardLevel = level;
         spawner = hazardSpawner;
-        alive = true;
-        hazardOwner = owner;
 
-        GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+        if(DataUtility.gameData.isNetworkedGame){
+            PunTools.PhotonRpcMine(view, "RPC_Initialize", RpcTarget.AllBuffered, level, t.position, owner, dir);
+        }
+        else{
+            gameObject.SetActive(true);
+            transform.localScale = level*scaleFactor*Vector3.one;
+            transform.position = t.position;
+            xSpeed = speed * dir;
+            ySpeed = gravity;
+            HazardLevel = level;
+            alive = true;
+            hazardOwner = owner;
+
+            GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+        }
+        
     }
 
     private Vector3 prevPosition = Vector3.zero;
 
     private void Update() 
     {
-        if(alive){ UpdatePosition(); }
+        if(DataUtility.gameData.isNetworkedGame){
+            if(view == null){
+                view = GetComponent<PhotonView>();
+            }
+        }
+        
+        UpdatePosition();
     }
 
     private void UpdatePosition(){
+        if(!alive) return;
+
         transform.position += new Vector3(xSpeed * Time.deltaTime * HazardSimulationRate, ySpeed * Time.deltaTime * HazardSimulationRate, 0f);
 
         hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
@@ -86,14 +104,24 @@ public class Hazard : MonoBehaviour
     }
 
     public bool TryDestroyHazard(PlayerID player){
-        if(player != hazardOwner){
+        if(player == hazardOwner) return false;
+
+        if(DataUtility.gameData.isNetworkedGame){
+            if(PhotonNetwork.IsMasterClient){
+                spawner.HazardDestroyed(HazardLevel, transform, player);
+                Destroy(gameObject);
+            }
+            else{
+                PunTools.PhotonRpcMine(view, "RPC_DestroyHazard", RpcTarget.MasterClient, player);
+            }
+
+            return true;
+        }   
+        else{
             gameObject.SetActive(false);
             spawner.HazardDestroyed(HazardLevel, transform, player);
             spawner.Return(this);
             return true;
-        }
-        else{
-            return false;
         }
     }
 
@@ -102,4 +130,27 @@ public class Hazard : MonoBehaviour
         
     }
 
+    #region PUN methods   
+    [PunRPC]
+    protected void RPC_DestroyHazard(PlayerID player)
+    {        
+        spawner.HazardDestroyed(HazardLevel, transform, player);
+        Destroy(gameObject);
+    }
+
+    [PunRPC]
+    protected void RPC_Initialize(int level, Vector3 pos, PlayerID owner, float dir = 1)
+    {        
+        gameObject.SetActive(true);
+        transform.localScale = level*scaleFactor*Vector3.one;
+        transform.position = pos;
+        xSpeed = speed * dir;
+        ySpeed = gravity;
+        HazardLevel = level;
+        alive = true;
+        hazardOwner = owner;
+
+        GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+    }
+    #endregion
 }
