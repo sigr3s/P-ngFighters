@@ -166,6 +166,7 @@ public class PlayerController : MonoBehaviour
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
             if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP) 
                 Damage(20.0f);
+                hazard.DestroyIfThrown();
         }
     }
 
@@ -176,8 +177,8 @@ public class PlayerController : MonoBehaviour
         }
         else {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
-            if (hazard != null && hazard.hazardOwner == playerID) 
-                hazard.Throw();
+            if (hazard != null && m_FireAction.triggered && hazard.hazardOwner == playerID) 
+                hazard.Throw(false);
         }
     }
 

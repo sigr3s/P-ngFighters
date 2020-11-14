@@ -26,6 +26,8 @@ public class Hazard : MonoBehaviour
     private int hitCount = 0;
     private HazardSpawner spawner;
     private bool alive = false;
+    private bool thrown = false;
+    private Vector3 throwSpeed = Vector3.zero;
 
     public static float HazardSimulationRate = 1f;
 
@@ -72,6 +74,11 @@ public class Hazard : MonoBehaviour
 
     private void UpdatePosition(){
         if(!alive) return;
+
+        if (thrown) {
+            transform.position += throwSpeed * Time.deltaTime;
+            return;
+        }
 
         transform.position += new Vector3(xSpeed * Time.fixedDeltaTime * HazardSimulationRate, ySpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f);
 
@@ -126,9 +133,24 @@ public class Hazard : MonoBehaviour
         }
     }
 
-    public void Throw()
+    public void Throw(bool left)
     {
-        
+        thrown = true;
+        if (left)
+        {
+            throwSpeed = new Vector3(-10.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            throwSpeed = new Vector3(10.0f, 0.0f, 0.0f);
+        }
+    }
+
+    public void DestroyIfThrown()
+    {
+        if (thrown) {
+            TryDestroyHazard(PlayerID.NP);
+        }
     }
 
     #region PUN methods   
