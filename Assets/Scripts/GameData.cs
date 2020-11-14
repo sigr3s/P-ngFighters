@@ -9,4 +9,6 @@ public class GameData : ScriptableObject {
 
     public InputDevice player1Device;
     public InputDevice player2Device;
+
+    public bool isNetworkedGame = false;
 }

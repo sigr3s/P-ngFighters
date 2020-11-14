@@ -62,6 +62,10 @@ public class PlayerController : MonoBehaviour
     public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
         this.isLocal = isLocal;
+
+        if(!isLocal){
+            GetComponent<PlayerInput>().enabled = false;
+        }
         _charaterController = GetComponent<CharacterController>();
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
