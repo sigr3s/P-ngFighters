@@ -135,11 +135,6 @@ public class PlayerController : MonoBehaviour
         _currentShot.owner = photonView.AmOwner ? this : null;   
     }
 
-    public void DestroyHazard(Hazard h)
-    {
-        Debug.LogError("@Lex??");
-    }
-
 
     public void Damage(float amount)
     {
