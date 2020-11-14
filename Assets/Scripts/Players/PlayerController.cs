@@ -65,12 +65,16 @@ public class PlayerController : MonoBehaviour
         _charaterController = GetComponent<CharacterController>();
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
-
+        _moveDirection = Vector3.zero;
     }
 
     void Update()
     {
         if(!isLocal || !initialized){
+            return;
+        }
+
+        if(!m_MoveAction.enabled){
             return;
         }
 
@@ -100,7 +104,7 @@ public class PlayerController : MonoBehaviour
     public void Damage()
     {
         if(isLocal){
-            Debug.Log("Au");
+            //Debug.Log("Au");
         }
     }
 }
