@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
         if(photonView == null){ photonView = GetComponentInChildren<PhotonView>(); }
         
         if(photonView){
-            _currentShot.owner = photonView.AmOwner ? this : null;   
+            _currentShot.owner = photonView.IsMine ? this : null;   
         }
         else{
             _currentShot.owner = null;
