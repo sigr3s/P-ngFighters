@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -12,16 +13,31 @@ public class GameController : MonoBehaviour {
     private PlayerController player1;
     private PlayerController player2;
 
-    private void Start() {
+    // UI
+    [Header("UI")]
+    [SerializeField] private Image player1HealthImage = null;
+    [SerializeField] private Image player1SuperImage = null;
+    [SerializeField] private Image player2HealthImage = null;
+    [SerializeField] private Image player2SuperImage = null;
+
+    // Round
+    private int currentRound = 0; // We asume a best of 3
+    private int player1WonRounds = 0;
+    private int player2WonRounds = 0;
+
+    private void Start()
+    {
         InstantiatePlayers();
+        ResetHUD();
     }
 
-    public virtual void InstantiatePlayers(){
+    public virtual void InstantiatePlayers()
+    {
 
-        if(DataUtility.gameData.isNetworkedGame){
+        if (DataUtility.gameData.isNetworkedGame) {
 
         }
-        else{
+        else {
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,
             controlScheme: null, pairWithDevice: DataUtility.gameData.player1Device);
 
@@ -36,5 +52,38 @@ public class GameController : MonoBehaviour {
             player2.Initialize(PlayerID.Player2, true);
             player2.transform.position = Player2Spawn.transform.position;
         }
+    }
+
+    public virtual void StartNewRound()
+    {
+        currentRound += 1;
+        ResetHUD();
+        // TODO - Reset healths, scene, etc
+    }
+
+    public virtual void EndRound()
+    {
+        // TODO - Check for round winner
+        if (player1WonRounds >= 2) {
+            GameFinished(0);
+        }
+        else if (player2WonRounds >= 2) {
+            GameFinished(1);
+        }
+        else {
+            // TODO - Round transitions
+            StartNewRound();
+        }
+    }
+
+    public virtual void ResetHUD()
+    {
+        player1HealthImage.fillAmount = 1.0f;
+        player2HealthImage.fillAmount = 1.0f;
+    }
+
+    public virtual void GameFinished(int winnerId)
+    {
+        // TODO - Winner announcement and end sequence
     }
 }
