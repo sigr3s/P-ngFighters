@@ -29,8 +29,8 @@ public class Hazard : MonoBehaviour
     private int hitCount = 0;
     private HazardSpawner spawner;
     private bool alive = false;
-    private bool thrown = false;
-    private Vector3 throwSpeed = Vector3.zero;
+    public bool thrown = false;
+    public Vector3 throwSpeed = Vector3.zero;
 
     public static float HazardSimulationRate = 1f;
 

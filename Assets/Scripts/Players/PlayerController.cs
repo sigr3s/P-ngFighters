@@ -151,8 +151,12 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(float amount)
     {
-        if(isLocal){
-            if (!invulnerable)
+        if (!invulnerable)
+        {
+            if(DataUtility.gameData.isNetworkedGame && photonView.IsMine){
+                Debug.LogError("Damagerino");
+            }
+            else
             {
                 Debug.Log("Au!");
                 health -= amount;
@@ -165,14 +169,29 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         //Damage, Powe UP
-        if(DataUtility.gameData.isNetworkedGame) {
-            //RWT call?
-        }
-        else {
+        if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
-            if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP) 
-                Damage(20.0f);
-                hazard.DestroyIfThrown();
+
+            if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP){
+                
+                if(hazard.thrown){
+                    float pix = m_MoveAction.ReadValue<Vector2>().x;
+
+                    Debug.Log($"{pix}   {hazard.throwSpeed.x}");
+
+                    if( Mathf.Sign(hazard.throwSpeed.x) == Mathf.Sign(pix) && Mathf.Abs(pix) > 0.15f ){
+                        hazard.DestroyIfThrown();
+                    }
+                    else{
+                        Damage(20.0f);
+                        hazard.DestroyIfThrown();
+                    }
+                }
+                else{
+                    Damage(20.0f);
+                    hazard.DestroyIfThrown();
+                }
+            }
         }
     }
 
