@@ -72,9 +72,8 @@ public class PlayerController : MonoBehaviour
         this.playerID = playerID;
         this.isLocal = isLocal;
 
-        if(!isLocal){
-            GetComponent<PlayerInput>().enabled = false;
-        }
+        GetComponent<PlayerInput>().enabled = isLocal;
+
         _charaterController = GetComponent<CharacterController>();
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;

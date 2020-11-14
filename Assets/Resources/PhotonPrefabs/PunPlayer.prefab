@@ -105,6 +105,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PunPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 7258452435503028159, guid: 5c0837d84dcb9994f982228ac048287c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c0837d84dcb9994f982228ac048287c, type: 3}
 --- !u!1 &3266456661732202255 stripped
