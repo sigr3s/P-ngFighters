@@ -9,10 +9,10 @@ using UnityEngine.UI;
 
 public class LocalJoiner : MonoBehaviour
 {
-    public Transform content;
-    public GameObject prefab;
-
-    public GameObject startGame;
+    [SerializeField] private Transform content;
+    [SerializeField] private GameObject prefab;
+    [SerializeField] private GameObject startGame;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private Dictionary<InputDevice, GameObject> UIDevices = new Dictionary<InputDevice, GameObject>();
     private bool gameLoading = false;
@@ -41,7 +41,7 @@ public class LocalJoiner : MonoBehaviour
     }
 
     private void Update() {
-        if(DataUtility.gameData.player1Device != null && DataUtility.gameData.player2Device != null){
+        if(canvasGroup.interactable && DataUtility.gameData.player1Device != null && DataUtility.gameData.player2Device != null){
             startGame.SetActive(true);
         }
         else{
@@ -85,7 +85,7 @@ public class LocalJoiner : MonoBehaviour
 
     public bool TryJoin(PlayerID player, InputDevice device)
     {
-        if(gameLoading) return false;
+        if(gameLoading || !canvasGroup.interactable) return false;
         switch(player){
             case PlayerID.Player1:
                 if(DataUtility.gameData.player1Device == null){

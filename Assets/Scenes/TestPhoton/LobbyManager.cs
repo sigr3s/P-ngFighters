@@ -15,7 +15,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField, Header("Mode selection")] CanvasGroup modeSelectionUi = null;
     [SerializeField] Button localModeButton = null, onlineModeButton = null;
     [SerializeField, Header("Mode selection")] CanvasGroup lobbyUi = null;
-    [SerializeField] Button joinRandomRoomButton = null, createOrJoinCustomRoomButton = null, closeButton = null;
+    [SerializeField, Header("Local selection")] CanvasGroup localUi = null;
+    [SerializeField] Button joinRandomRoomButton = null, createOrJoinCustomRoomButton = null, closeButton = null, localCloseButton = null;
     [SerializeField] TMP_InputField createOrJoinCustomRoomInputField = null;
     [SerializeField] GameObject waitingLabel = null;
     string roomName;
@@ -41,8 +42,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     void Init()
     {
         waitingLabel.SetActive(false);
-        lobbyUi.alpha = modeSelectionUi.alpha = 0;
-        modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = lobbyUi.interactable = lobbyUi.blocksRaycasts = false;
+        lobbyUi.alpha = localUi.alpha = modeSelectionUi.alpha = 0;
+        modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = localUi.interactable = localUi.blocksRaycasts = lobbyUi.interactable = lobbyUi.blocksRaycasts = false;
     }
 
     void AddListeners()
@@ -55,6 +56,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         createOrJoinCustomRoomButton.onClick.AddListener(CreateCustomRoom);
 
         closeButton.onClick.AddListener(CancelJoin);
+        localCloseButton.onClick.AddListener(CancelLocal);
     }
 
     void RemoveListeners()
@@ -78,6 +80,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     void LocalModeSelected()
     {
         Debug.Log("Local mode selected");
+        modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = false;
+        modeSelectionUi.DOFade(0, 0.5f);
+        localUi.DOFade(1, 0.5f).OnComplete(() => localUi.interactable = localUi.blocksRaycasts = true );
     }
 
     void JoinRandomRoom()
@@ -101,6 +106,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LeaveRoom();
             waitingLabel.SetActive(false);
         }
+    }
+
+    void CancelLocal() 
+    {
+        localUi.interactable = localUi.blocksRaycasts = false;
+        localUi.DOFade(0, 0.5f);
+        modeSelectionUi.DOFade(1, 0.5f).OnComplete(() => modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = true );
     }
 
     void CreateRoom(bool visible = true)
