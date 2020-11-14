@@ -52,7 +52,7 @@ public class HazardSpawner : MonoBehaviour {
         return GetPooledHazard();
     }
 
-    public void HazardDestroyed(int hl, Transform t){
+    public void HazardDestroyed(int hl, Transform t, PlayerID player){
 
         if(hl == 1){
             lvl1Destroyed++;
@@ -61,7 +61,7 @@ public class HazardSpawner : MonoBehaviour {
             float dir = 1;
             for(int i = 0; i < 2; i ++){
                 var h = GetPooledHazard();
-                h.Initialize(this, hl - 1 , t, dir);
+                h.Initialize(this, hl - 1 , t, player, dir);
                 dir *= -1;
             }
         }

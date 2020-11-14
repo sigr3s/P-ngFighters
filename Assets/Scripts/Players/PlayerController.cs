@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     //  Block stun
     //  A player always faces the other player bc you know fgc
 
+    public PlayerID playerID = PlayerID.Player1;
+
     private PlayerInput _playerInput;
     private PlayerInput m_PlayerInput {
         get{
@@ -52,14 +54,25 @@ public class PlayerController : MonoBehaviour
     private ProjectileController _currentShot = null;
 
     private CharacterController _charaterController = null;
+
+    private bool isOwner = true;
+
+    public void Initialize(PlayerID ID, Color PlayerColor, bool isOwner){ //TODO: Sync with alex on owner?
+
+    }
     
     void Awake()
     {
         _charaterController = GetComponent<CharacterController>();
+        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
     }
 
     void Update()
     {
+        if(!isOwner){
+            return;
+        }
+
         // Movement
         var move = m_MoveAction.ReadValue<Vector2>();
         if (_charaterController.isGrounded && move.y > 0.4f) {
@@ -80,5 +93,12 @@ public class PlayerController : MonoBehaviour
             Destroy(_currentShot.gameObject);
         }
         _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
+        _currentShot.shooter = playerID;   
     }
+}
+
+public enum PlayerID{
+    NP = 0,
+    Player1 = 1,
+    Player2 = 2
 }

@@ -4,14 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Hazard : MonoBehaviour
-{
-    public enum HazardTarget{
-        None,
-        Player1,
-        Player2
-    }
-    
-    public HazardTarget hazardTarget;
+{   
+    public PlayerID hazardOwner;
     public float gravity = 20.0F;
     public float speed = 20.0F;
     public float bounceFactor = 1.9f;
@@ -32,8 +26,9 @@ public class Hazard : MonoBehaviour
     private HazardSpawner spawner;
     private bool alive = false;
     
-    public void Initialize(HazardSpawner hazardSpawner, int level, Transform t, float dir = 1)
+    public void Initialize(HazardSpawner hazardSpawner, int level, Transform t, PlayerID owner = PlayerID.NP, float dir = 1)
     {
+        gameObject.SetActive(true);
         transform.localScale = level*scaleFactor*Vector3.one;
         transform.position = t.position;
         xSpeed = speed * dir;
@@ -41,8 +36,9 @@ public class Hazard : MonoBehaviour
         HazardLevel = level;
         spawner = hazardSpawner;
         alive = true;
-        
-        gameObject.SetActive(true);
+        hazardOwner = owner;
+
+        GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
     }
 
     private Vector3 prevPosition = Vector3.zero;
@@ -75,12 +71,6 @@ public class Hazard : MonoBehaviour
                     xSpeed *= -1;
                     transform.position += new Vector3(2* xSpeed * Time.deltaTime, 0f, 0f);
                 }
-                else if(Weapon == (Weapon | (1 << h.collider.gameObject.layer))){
-                    alive = false;
-                    h.collider.gameObject.SetActive(false);
-                    DestroyHazard();
-                    return;
-                }
                 else if(Player == (Player | (1 << h.collider.gameObject.layer))){
                     Debug.Log("Player?");
                     return;   
@@ -97,9 +87,15 @@ public class Hazard : MonoBehaviour
         prevPosition = transform.position;
     }
 
-    private void DestroyHazard(){
-        gameObject.SetActive(false);
-        spawner.HazardDestroyed(HazardLevel, transform);
-        spawner.Return(this);
+    public bool TryDestroyHazard(PlayerID player){
+        if(player != hazardOwner){
+            gameObject.SetActive(false);
+            spawner.HazardDestroyed(HazardLevel, transform, player);
+            spawner.Return(this);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

@@ -7,6 +7,7 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] private GameObject trailGO = null;
     private Vector3 _moveDirection = Vector3.zero;
     public bool alive = true;
+    public PlayerID shooter = PlayerID.NP;
 
     void Start()
     {
@@ -28,6 +29,12 @@ public class ProjectileController : MonoBehaviour
             gameObject.SetActive(false);
         }
         else{
+            if(collision.collider.TryGetComponent<Hazard>(out Hazard h)){   
+                if(h.TryDestroyHazard(shooter)){
+                    alive = false;
+                    gameObject.SetActive(false);
+                }
+            }
             // FIXME: Handle player here
         }
     }
