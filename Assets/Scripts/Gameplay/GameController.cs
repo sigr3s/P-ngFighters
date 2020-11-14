@@ -2,16 +2,23 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Photon.Pun;
+using System.IO;
 
 public class GameController : MonoBehaviour {
 
+    [Header("Always")]
     public Transform Player1Spawn;
     public Transform Player2Spawn;   
-
-    public GameObject PlayerPrefab;
-
     private PlayerController player1;
     private PlayerController player2;
+
+    [Header("Network")]
+    string pathRelativeToResources = "PhotonPrefabs";
+    string prefabName => "PhotonDummyPlayer";
+
+    [Header("Local")]
+    public GameObject PlayerPrefab;
 
     // UI
     [Header("UI")]
@@ -35,6 +42,7 @@ public class GameController : MonoBehaviour {
     {
         if(DataUtility.gameData.isNetworkedGame){
             Debug.LogWarning("NETWORK SPAWN PLAYERS GOES HERE!");
+            PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), Vector3.zero, Quaternion.identity);
         }
         else {
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,

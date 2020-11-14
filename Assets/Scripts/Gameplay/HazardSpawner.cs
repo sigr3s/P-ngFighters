@@ -14,7 +14,7 @@ public class HazardSpawner : MonoBehaviour {
 
     private int lvl1Destroyed = 0;
 
-
+    // Out of start
     private void Start() {
         GrowHazardPool(initialPoolSize);
 
@@ -52,6 +52,7 @@ public class HazardSpawner : MonoBehaviour {
         return GetPooledHazard();
     }
 
+    //TODO: Network this? spawn powerups
     public void HazardDestroyed(int hl, Transform t, PlayerID player){
 
         if(hl == 1){
@@ -65,7 +66,7 @@ public class HazardSpawner : MonoBehaviour {
                 dir *= -1;
             }
         }
-
+        
         if(lvl1Destroyed == Math.Pow(2, hazardLevel -1)){
             var h = GetPooledHazard();
             h.Initialize(this, hazardLevel, hazardSpawnPoints[UnityEngine.Random.Range(0, hazardSpawnPoints.Count)]);

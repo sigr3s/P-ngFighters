@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     private void ShootProjectile()
     {
         if(DataUtility.gameData.isNetworkedGame){
-
+            //RWT call?
         }
         else{
             if (_currentShot != null) {
@@ -120,7 +120,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        
+        //Damage, Powe UP
+        if(DataUtility.gameData.isNetworkedGame){
+            //RWT call?
+        }
+        else{
+
+        }
     }
 }
 
