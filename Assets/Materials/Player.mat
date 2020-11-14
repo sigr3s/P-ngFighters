@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Player
-  m_Shader: {fileID: -6465566751694194690, guid: 44d2e0231d0996a46948cd6cc19052f3,
+  m_Shader: {fileID: -6465566751694194690, guid: a06e080a52b2a8245b19d936d97a7a05,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -33,6 +33,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_4D11C7AF:
+        m_Texture: {fileID: 2800000, guid: d189f640732278f439e60c809d98b950, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_938C7712:
+        m_Texture: {fileID: 2800000, guid: 1fbb41709a1d9334696860db720026e5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -66,6 +74,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_DB940B55: -0.37
     - _AlphaClip: 0
     - _Blend: 0
     - _BlendOp: 0
