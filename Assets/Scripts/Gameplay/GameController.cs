@@ -138,13 +138,13 @@ public class GameController : MonoBehaviourPunCallbacks {
             Debug.Log("Player 2 won the round!");
             roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Blue Player";
-            lowerText.text = "Wins the Round!";
+            lowerText.text = "wins the Round!";
         } else if (player2.health <= 0.0f) {
             player1WonRounds++;
             Debug.Log("Player 1 won the round!");
             roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Red Player";
-            lowerText.text = "Wins the Round!";
+            lowerText.text = "wins the Round!";
         }
 
         P1CloserRoundImage.color = player1WonRounds > 0 ? DataUtility.GetColorFor(PlayerID.Player1) : Color.black;
