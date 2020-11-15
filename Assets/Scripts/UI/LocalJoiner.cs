@@ -51,13 +51,16 @@ public class LocalJoiner : MonoBehaviour
 
     public void OnStart(InputAction.CallbackContext context)
     {
+       StartGmae();
+    }
+
+    public void StartGmae(){
         if(!gameLoading && startGame.activeSelf){
             gameLoading = true;
             DataUtility.gameData.isNetworkedGame = false;
             startAction.Disable();
             SceneManager.LoadScene("Game");
         }
-
     }
 
     private void OnChange(InputDevice d, InputDeviceChange state)

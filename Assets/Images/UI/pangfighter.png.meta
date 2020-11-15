@@ -98,6 +98,24 @@ TextureImporter:
   - first:
       213: -505192461703775635
     second: power_player_over
+  - first:
+      213: 7153628637083421701
+    second: controller_empty
+  - first:
+      213: 2505213416996369964
+    second: controller_player1
+  - first:
+      213: 1905924502245880608
+    second: controller_player2
+  - first:
+      213: 3233555871243290079
+    second: keyboard_empty
+  - first:
+      213: -8113320152842004796
+    second: keyboard_player1
+  - first:
+      213: -2499573332607350475
+    second: keyboard_player2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -145,7 +163,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -256,7 +274,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1905
-        y: 1854
+        y: 1518
         width: 57
         height: 58
       alignment: 9
@@ -277,7 +295,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1905
-        y: 1980
+        y: 1644
         width: 62
         height: 64
       alignment: 0
@@ -298,7 +316,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1905
-        y: 1916
+        y: 1580
         width: 60
         height: 60
       alignment: 9
@@ -360,7 +378,7 @@ TextureImporter:
       name: btn_cancel_pressed
       rect:
         serializedVersion: 2
-        x: 700
+        x: 1387
         y: 901
         width: 425
         height: 98
@@ -403,7 +421,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1966
-        y: 1854
+        y: 1518
         width: 57
         height: 58
       alignment: 9
@@ -424,7 +442,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1971
-        y: 1980
+        y: 1644
         width: 62
         height: 64
       alignment: 0
@@ -445,7 +463,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1969
-        y: 1916
+        y: 1580
         width: 60
         height: 60
       alignment: 9
@@ -570,8 +588,8 @@ TextureImporter:
       name: btn_principal_normal
       rect:
         serializedVersion: 2
-        x: 1474
-        y: 977
+        x: 956
+        y: 899
         width: 427
         height: 100
       alignment: 9
@@ -591,8 +609,8 @@ TextureImporter:
       name: btn_principal_pressed
       rect:
         serializedVersion: 2
-        x: 1385
-        y: 875
+        x: 1387
+        y: 799
         width: 425
         height: 98
       alignment: 9
@@ -654,7 +672,7 @@ TextureImporter:
       name: btn_secundario_pressed
       rect:
         serializedVersion: 2
-        x: 872
+        x: 1037
         y: 1003
         width: 598
         height: 98
@@ -693,6 +711,69 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
+      name: controller_empty
+      rect:
+        serializedVersion: 2
+        x: 1905
+        y: 1936
+        width: 112
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50c4b68085bc64360800000000000000
+      internalID: 7153628637083421701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller_player1
+      rect:
+        serializedVersion: 2
+        x: 1905
+        y: 1824
+        width: 112
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c267c9e545e44c220800000000000000
+      internalID: 2505213416996369964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller_player2
+      rect:
+        serializedVersion: 2
+        x: 1905
+        y: 1712
+        width: 112
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 023341d9c34337a10800000000000000
+      internalID: 1905924502245880608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
       name: input_field_normal
       rect:
         serializedVersion: 2
@@ -718,7 +799,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 609
-        y: 799
+        y: 797
         width: 425
         height: 98
       alignment: 0
@@ -730,6 +811,69 @@ TextureImporter:
       bones: []
       spriteID: a2865f09f3280ca60800000000000000
       internalID: 7692291373075359786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard_empty
+      rect:
+        serializedVersion: 2
+        x: 1801
+        y: 1328
+        width: 161
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd5c5dacee5efdc20800000000000000
+      internalID: 3233555871243290079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard_player1
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 1116
+        width: 161
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c695d4ae42b76f80800000000000000
+      internalID: -8113320152842004796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keyboard_player2
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 1045
+        width: 161
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53946eb1c4bbf4dd0800000000000000
+      internalID: -2499573332607350475
       vertices: []
       indices: 
       edges: []
@@ -802,7 +946,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1705
-        y: 1200
+        y: 1198
         width: 264
         height: 62
       alignment: 0
@@ -823,7 +967,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1664
-        y: 1081
+        y: 1079
         width: 252
         height: 49
       alignment: 9
@@ -844,7 +988,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1664
-        y: 1134
+        y: 1132
         width: 263
         height: 62
       alignment: 9
@@ -864,8 +1008,8 @@ TextureImporter:
       name: power_player2_fill
       rect:
         serializedVersion: 2
-        x: 1129
-        y: 950
+        x: 700
+        y: 992
         width: 252
         height: 49
       alignment: 9
@@ -886,7 +1030,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1785
-        y: 1266
+        y: 1264
         width: 252
         height: 60
       alignment: 9
