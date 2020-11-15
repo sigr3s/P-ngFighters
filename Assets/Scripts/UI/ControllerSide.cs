@@ -12,19 +12,25 @@ public class ControllerSide : MonoBehaviour {
     private ControllerSideDevice currentSideDevice;
 
     [SerializeField] private List<ControllerSideDevice> sideDevices = new List<ControllerSideDevice>();
+    [SerializeField] private ControllerSideDevice defaultCSD = null;
 
 
     public void Initialize(InputDevice id, LocalJoiner localJoiner){
         inputDevice = id;
 
         foreach(ControllerSideDevice csd in sideDevices){
-            if(id.path.ToLower().Contains(csd.path.ToLower()) || id.description.capabilities.ToLower().Contains(csd.path.ToLower())){
+            if(id.path.ToLower().Contains(csd.path.ToLower())){
                 currentSideDevice = csd;
                 currentSideDevice.Enable();
             }
             else{
                 csd.Disable();
             }
+        }
+
+        if(currentSideDevice == null){
+            currentSideDevice = defaultCSD;
+            currentSideDevice.Enable();
         }
 
         this.joiner = localJoiner;

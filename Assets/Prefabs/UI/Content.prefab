@@ -289,6 +289,11 @@ MonoBehaviour:
     DeviceOnP1: {fileID: 5254737932001532074}
     DeviceOnP2: {fileID: 6202320445659857615}
     DeviceOnNeut: {fileID: 2029772427745272447}
+  defaultCSD:
+    path: gamepad
+    DeviceOnP1: {fileID: 5254737932001532074}
+    DeviceOnP2: {fileID: 6202320445659857615}
+    DeviceOnNeut: {fileID: 2029772427745272447}
 --- !u!114 &-5637870254916985560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +343,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b935f519-959d-4c2f-9c9f-36102c996bb2
     m_ActionName: Player/Start[/Keyboard/enter,/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2aa2817d-1672-4629-b2be-a18a402a4e3d
+    m_ActionName: Player/Super[/Keyboard/e,/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
