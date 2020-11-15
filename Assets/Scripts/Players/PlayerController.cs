@@ -157,13 +157,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // Fire
         if(m_FireAction.triggered && throwHazard != null){
             throwHazard.Throw( transform.forward.x > 0 ? false : true, playerID);
-            animator.SetTrigger("shoot");
         }
         else if (m_FireAction.triggered && _charaterController.isGrounded) {
             if (_currentShot == null || !_currentShot.alive){
+                animator.SetTrigger("shoot");
                 ShootProjectile();
             }
             else if(instantShoot){
+                animator.SetTrigger("shoot");
                 ShootProjectile();
             }
         }
