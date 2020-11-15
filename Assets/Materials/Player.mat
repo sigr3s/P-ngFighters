@@ -38,11 +38,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_938C7712:
-        m_Texture: {fileID: 2800000, guid: 1fbb41709a1d9334696860db720026e5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9b2eedba1e3057e4b998cdef3d448105, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_9DDDF552:
+        m_Texture: {fileID: 2800000, guid: a1454d7237641fa49a7f66d6bee624ad, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_D904F502:
-        m_Texture: {fileID: 2800000, guid: 1fbb41709a1d9334696860db720026e5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 66efb24ed46044ab8a039599cbc47d7b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -124,7 +128,7 @@ Material:
     - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.9529412, g: 0, b: 0.68129265, a: 1}
+    - _Color: {r: 0.9529412, g: 0, b: 0.17153743, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _PatternColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
