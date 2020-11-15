@@ -7,6 +7,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using Photon.Realtime;
+using TMPro;
 
 public class GameController : MonoBehaviourPunCallbacks {
 
@@ -30,6 +31,8 @@ public class GameController : MonoBehaviourPunCallbacks {
     [SerializeField] private Image player1SuperImage = null;
     [SerializeField] private Image player2HealthImage = null;
     [SerializeField] private Image player2SuperImage = null;
+    [SerializeField] private TMP_Text upperText = null;
+    [SerializeField] private TMP_Text lowerText = null;
 
     // Round
     private int currentRound = 0; // We asume a best of 3
@@ -132,6 +135,8 @@ public class GameController : MonoBehaviourPunCallbacks {
     {
         player1HealthImage.fillAmount = 1.0f;
         player2HealthImage.fillAmount = 1.0f;
+        upperText.text = "";
+        lowerText.text = "";
     }
 
     public virtual void GameFinished(int winnerId)
