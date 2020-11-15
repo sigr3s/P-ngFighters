@@ -213,8 +213,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: ROUND 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c3eee89c744a96740bda21b9faf6dc82, type: 2}
+  m_sharedMaterial: {fileID: -2114212302240427793, guid: c3eee89c744a96740bda21b9faf6dc82,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1179,8 +1180,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: RUMBLE!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c3eee89c744a96740bda21b9faf6dc82, type: 2}
+  m_sharedMaterial: {fileID: -2114212302240427793, guid: c3eee89c744a96740bda21b9faf6dc82,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1469,6 +1471,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerUIRight
       objectReference: {fileID: 0}
+    - target: {fileID: 6672803663091312316, guid: 658b6bc94b8457048838be01e65e2719,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3591741012625350614, guid: 28c8c57897fef314a8c56ec078feac47,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 658b6bc94b8457048838be01e65e2719, type: 3}
 --- !u!224 &1700777368 stripped
