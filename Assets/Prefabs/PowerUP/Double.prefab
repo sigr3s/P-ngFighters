@@ -87,7 +87,7 @@ MonoBehaviour:
   Player:
     serializedVersion: 2
     m_Bits: 1024
-  Model: {fileID: 7117331155366580563}
+  Model: {fileID: 1023577210962834587}
 --- !u!1 &7117331156759091563
 GameObject:
   m_ObjectHideFlags: 0
