@@ -9,6 +9,7 @@ public class TimeFreezer : PowerUP {
 
     public override void FinishPowerUP(PlayerController player){
         Hazard.HazardSimulationRate = 1f;
+        Destroy(gameObject);
     }
 
 }
