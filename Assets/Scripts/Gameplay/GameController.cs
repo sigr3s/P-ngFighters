@@ -100,7 +100,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         player1.health = 100.0f;
         player2.health = 100.0f;
         Debug.Log("Round "+currentRound+", Fight!");
-        upperText.text = "Round 1";
+        upperText.text = "Round "+currentRound;
         lowerText.text = "3";
         yield return new WaitForSeconds(1.0f);
         lowerText.text = "2";
@@ -114,25 +114,34 @@ public class GameController : MonoBehaviourPunCallbacks {
         lowerText.text = "";
     }
 
-    public virtual void EndRound()
+    public virtual IEnumerator EndRound()
     {
         hazardSpawner.CleanAll();
 
         if (player1.health <= 0.0f) {
             player2WonRounds++;
             Debug.Log("Player 2 won the round!");
+            upperText.text = "Blue Player";
+            lowerText.text = "Wins the Round!";
         } else if (player2.health <= 0.0f) {
             player1WonRounds++;
             Debug.Log("Player 1 won the round!");
+            upperText.text = "Red Player";
+            lowerText.text = "Wins the Round!";
         }
         if (player1WonRounds >= 2) {
+            upperText.text = "Finished!";
+            lowerText.text = "Red Player Victory!";
             GameFinished(0);
         }
         else if (player2WonRounds >= 2) {
+            upperText.text = "Finished!";
+            lowerText.text = "Blue Player Victory!";
             GameFinished(1);
         }
         else {
             // TODO - Round transitions
+            yield return new WaitForSeconds(3.0f);
             StartCoroutine(StartNewRound());
         }
     }
@@ -165,7 +174,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         player2SuperImage.fillAmount = player2.super / 100.0f;
 
         if (player1.health <= 0.0f || player2.health <= 0.0f) {
-            EndRound();
+            StartCoroutine(EndRound());
         }
     }  
     
