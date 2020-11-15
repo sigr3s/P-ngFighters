@@ -131,11 +131,11 @@ public class Hazard : MonoBehaviour
             return false;
         }
 
-        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.9f;
+        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.95f;
         int powerUp = UnityEngine.Random.Range(0, powerUps.Count);
 
         if(DataUtility.gameData.isNetworkedGame){
-            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player, generatePowerUp , powerUp);
+            PunTools.PhotonRPC(view, "RPC_TryDestroyHazard", RpcTarget.AllBuffered, player, generatePowerUp , powerUp);
             return true;
         }   
         else{
@@ -146,6 +146,16 @@ public class Hazard : MonoBehaviour
             spawner.HazardDestroyed(HazardLevel, transform, player, this);
             spawner.Return(this);
             return true;
+        }
+    }
+
+    public void DestroyHazard()
+    {
+        if(DataUtility.gameData.isNetworkedGame){
+            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered);
+        }   
+        else{
+            Destroy(gameObject);
         }
     }
 
@@ -183,7 +193,7 @@ public class Hazard : MonoBehaviour
 
     #region PUN methods   
     [PunRPC]
-    protected void RPC_DestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
+    protected void RPC_TryDestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
     {        
         spawner?.HazardDestroyed(HazardLevel, transform, player, this);
 
@@ -191,6 +201,12 @@ public class Hazard : MonoBehaviour
             Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
         }
 
+        Destroy(gameObject);
+    }
+
+   [PunRPC]
+    protected void RPC_DestroyHazard()
+    {    
         Destroy(gameObject);
     }
 
