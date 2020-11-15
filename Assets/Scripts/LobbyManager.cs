@@ -32,7 +32,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         AddListeners();
     }
 
-    void Start() => PhotonNetwork.ConnectUsingSettings();
+    void Start()
+    {
+        if(PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
 
     void OnDestroy() 
     {
