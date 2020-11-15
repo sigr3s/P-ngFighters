@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour
         if (!invulnerable)
         {
             if(DataUtility.gameData.isNetworkedGame){
-                PunTools.PhotonRpcMine(photonView, "RPC_Damage", RpcTarget.AllBuffered);
+                PunTools.PhotonRpcMine(photonView, "RPC_Damage", RpcTarget.AllBuffered, amount);
             }
             else
             {
