@@ -45,9 +45,10 @@ public class GameController : MonoBehaviourPunCallbacks {
     {
         InstantiatePlayers();
         ResetHUD();
-
+        upperText.text = "Round 1";
+        lowerText.text = "3";
         if(!DataUtility.gameData.isNetworkedGame){
-            StartNewRound();
+            StartCoroutine(StartNewRound());
         }
     }
 
@@ -92,15 +93,25 @@ public class GameController : MonoBehaviourPunCallbacks {
         }
     }
 
-    public virtual void StartNewRound()
+    public virtual IEnumerator StartNewRound()
     {
         currentRound += 1;
         ResetHUD();
-        // TODO - Reset healths, scene, etc
         player1.health = 100.0f;
         player2.health = 100.0f;
         Debug.Log("Round "+currentRound+", Fight!");
+        upperText.text = "Round 1";
+        lowerText.text = "3";
+        yield return new WaitForSeconds(1.0f);
+        lowerText.text = "2";
+        yield return new WaitForSeconds(1.0f);
+        lowerText.text = "1";
+        yield return new WaitForSeconds(1.0f);
+        lowerText.text = "RUMBLE!";
         hazardSpawner.StartRound();
+        yield return new WaitForSeconds(1.0f);
+        upperText.text = "";
+        lowerText.text = "";
     }
 
     public virtual void EndRound()
@@ -122,7 +133,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         }
         else {
             // TODO - Round transitions
-            StartNewRound();
+            StartCoroutine(StartNewRound());
         }
     }
 
@@ -182,7 +193,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         if(player1 != null && player2 != null){
             player1.OnUIShouldUpdate += OnUIShouldUpdate;
             player2.OnUIShouldUpdate += OnUIShouldUpdate; 
-            StartNewRound();
+            StartCoroutine(StartNewRound());
         }
     }
 }
