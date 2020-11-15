@@ -149,17 +149,20 @@ public class Hazard : MonoBehaviour
         }
     }
 
-    public void Throw(bool left)
+    public void Throw(bool left, PlayerID owner)
     {
         if(DataUtility.gameData.isNetworkedGame){
-            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left);
+            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left, owner);
         }
         else{
-            ThrowInternal(left);
+            ThrowInternal(left, owner);
         }
     }
 
-    private void ThrowInternal(bool left){
+    private void ThrowInternal(bool left, PlayerID owner){
+        this.hazardOwner = owner;
+        GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+
         thrown = true;
         if (left)
         {
@@ -207,8 +210,8 @@ public class Hazard : MonoBehaviour
     }
 
     [PunRPC]
-    protected void RPC_ThrowHazard(bool left){
-        ThrowInternal(left);
+    protected void RPC_ThrowHazard(bool left, PlayerID owner){
+        ThrowInternal(left, owner);
     }
     #endregion
 }

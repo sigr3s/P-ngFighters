@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log($"{pix}   {hazard.throwSpeed.x}");
 
                     if( Mathf.Sign(hazard.throwSpeed.x) == Mathf.Sign(pix) && Mathf.Abs(pix) > 0.15f ){
-                        hazard.DestroyIfThrown();
+                        hazard.Throw( transform.forward.x > 0 ? false : true, playerID);
                     }
                     else{
                         Damage(20.0f);
@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour
         if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
             if (hazard != null && m_FireAction.triggered && hazard.hazardOwner == playerID){
-                hazard.Throw(false);
+                hazard.Throw( transform.forward.x > 0 ? false : true, playerID);
             }
         }
     }
