@@ -84,7 +84,7 @@ public class Hazard : MonoBehaviour
 
         if (thrown) {
             transform.position += throwSpeed * Time.deltaTime;
-            hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
+            hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
 
             for(int i = 0; i < hitCount; i++){
                 var h = hits[i];
@@ -103,24 +103,23 @@ public class Hazard : MonoBehaviour
         for(int i = 0; i < hitCount; i++){
             var h = hits[i];
 
-            if(h.collider != null && h.collider.gameObject != gameObject){
-                
-
-                if(Horizontal == (Horizontal | (1 << h.collider.gameObject.layer))){
-                    if(h.collider.gameObject.tag == "Ceiling"){
-                        ySpeed = gravity * Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
-                    }
-                    else{
-                        ySpeed = -gravity *  Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
-                    }
-
-
-                    transform.position += new Vector3(0, ySpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f);
+            if(Horizontal == (Horizontal | (1 << h.collider.gameObject.layer))){
+                if(h.collider.gameObject.tag == "Ceiling"){
+                    ySpeed = gravity * Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
                 }
-                else if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
-                    xSpeed *= -1;
-                    transform.position += new Vector3(2* xSpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f, 0f);
+                else{
+                    ySpeed = -gravity *  Mathf.Pow(bounceFactor, HazardLevel) * Mathf.Sign(h.transform.forward.y);
                 }
+
+
+                transform.position += new Vector3(0, 2*  ySpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f);
+                break;
+            }
+            
+            if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
+                xSpeed *= -1;
+                transform.position += new Vector3(2* xSpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f, 0f);
+                break;
             }
         }
 
