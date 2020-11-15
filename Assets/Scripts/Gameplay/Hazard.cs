@@ -143,7 +143,7 @@ public class Hazard : MonoBehaviour
                 Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
             }
             gameObject.SetActive(false);
-            spawner.HazardDestroyed(HazardLevel, transform, player);
+            spawner.HazardDestroyed(HazardLevel, transform, player, this);
             spawner.Return(this);
             return true;
         }
@@ -185,7 +185,7 @@ public class Hazard : MonoBehaviour
     [PunRPC]
     protected void RPC_DestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
     {        
-        spawner?.HazardDestroyed(HazardLevel, transform, player);
+        spawner?.HazardDestroyed(HazardLevel, transform, player, this);
 
         if(generatePowerUp){
             Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
