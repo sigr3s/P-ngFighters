@@ -34,17 +34,22 @@ public class Hazard : MonoBehaviour
 
     public static float HazardSimulationRate = 1f;
 
-    PhotonView view;
+    PhotonView _view;
+    PhotonView view{
+        get{
+            if(_view == null){
+                _view = GetComponent<PhotonView>();
+            }
+
+            return _view;
+        }
+    }
     
     public void Initialize(HazardSpawner hazardSpawner, int level, Transform t, PlayerID owner = PlayerID.NP, float dir = 1)
     {
         spawner = hazardSpawner;
 
         if(DataUtility.gameData.isNetworkedGame){
-            if(view == null){
-                view = GetComponent<PhotonView>();
-            }
-            
             PunTools.PhotonRpcMine(view, "RPC_Initialize", RpcTarget.AllBuffered, level, t.position, owner, dir);
         }
         else{
@@ -65,13 +70,7 @@ public class Hazard : MonoBehaviour
     private Vector3 prevPosition = Vector3.zero;
 
     private void FixedUpdate() 
-    {
-        if(DataUtility.gameData.isNetworkedGame){
-            if(view == null){
-                view = GetComponent<PhotonView>();
-            }
-        }
-        
+    {   
         UpdatePosition();
     }
 
@@ -126,9 +125,9 @@ public class Hazard : MonoBehaviour
         prevPosition = transform.position;
     }
 
-    public bool TryDestroyHazard(PlayerID player){
+    public int TryDestroyHazard(PlayerID player){
         if(player == hazardOwner){ 
-            return false;
+            return -1;
         }
 
         bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.95f;
@@ -136,7 +135,7 @@ public class Hazard : MonoBehaviour
 
         if(DataUtility.gameData.isNetworkedGame){
             PunTools.PhotonRPC(view, "RPC_TryDestroyHazard", RpcTarget.AllBuffered, player, generatePowerUp , powerUp);
-            return true;
+            return HazardLevel;
         }   
         else{
             if(generatePowerUp){
@@ -145,7 +144,7 @@ public class Hazard : MonoBehaviour
             gameObject.SetActive(false);
             spawner.HazardDestroyed(HazardLevel, transform, player, this);
             spawner.Return(this);
-            return true;
+            return HazardLevel;
         }
     }
 

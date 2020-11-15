@@ -43,30 +43,20 @@ public class ProjectileController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if(DataUtility.gameData.isNetworkedGame){
-            if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
-                if(owner != null){
-                    if(h.TryDestroyHazard(shooter)){
-                        Disable();
-                    }
-                }
-                else{
-
-                }
-            }
-        }
-        else{
-            if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){   
-                if(h.TryDestroyHazard(shooter)){
-                   Disable();
+        if(other.gameObject.TryGetComponent<Hazard>(out Hazard h)){
+            if(owner != null){
+                int hazardLevel = h.TryDestroyHazard(shooter);
+                if(hazardLevel > 0){
+                    Disable(hazardLevel);
                 }
             }
         }
     }
 
-    public void Disable(){
+    public void Disable(int hazardLevel){
         alive = false;
         gameObject.SetActive(false);
+        owner?.ChargeSuper( Mathf.Pow(1.5f, (5.0f- hazardLevel)));
     }
 
     private void OnDisable() {

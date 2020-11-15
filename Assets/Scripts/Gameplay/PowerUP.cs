@@ -38,9 +38,9 @@ public class PowerUP : MonoBehaviour
         Model.SetActive(true);
     }
 
-    protected void Update() {
+    protected void FixedUpdate() {
         if(interactable){   
-            transform.position += new Vector3(0, ySpeed * Time.deltaTime, 0f);
+            transform.position += new Vector3(0, ySpeed * Time.fixedDeltaTime, 0f);
 
             hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, Mask, QueryTriggerInteraction.UseGlobal);
 
@@ -69,7 +69,7 @@ public class PowerUP : MonoBehaviour
             }
         }
         else if(powerUPTimeOn >= -0.5f){
-            powerUPTimeOn += Time.deltaTime;
+            powerUPTimeOn += Time.fixedDeltaTime;
 
             if(powerUPTimeOn >= duration){
                 powerUPTimeOn = -1;

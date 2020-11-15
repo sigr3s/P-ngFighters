@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     // A player can:
     //  Move wasd arrows etc x
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     // Attributes
     public float health = 100.0f;
-    public float super = 0.0f;
+    [SerializeField] public float super = 0.0f;
     public bool invulnerable = false;
     [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
@@ -68,7 +68,12 @@ public class PlayerController : MonoBehaviour
     private bool isLocal = true;
     private bool initialized = false;
 
-    PhotonView photonView;
+    public void ChargeSuper(float v)
+    {
+        super += v;
+        OnUIShouldUpdate?.Invoke();
+    }
+
     public bool instantShoot = false;
 
     private PlayerController _other = null;
@@ -99,11 +104,6 @@ public class PlayerController : MonoBehaviour
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
         _moveDirection = Vector3.zero;
-
-        if(DataUtility.gameData.isNetworkedGame)
-        {
-            if(photonView == null){ photonView = GetComponentInChildren<PhotonView>(); }
-        }
     }
 
     void Update()
@@ -164,10 +164,9 @@ public class PlayerController : MonoBehaviour
         }
         _currentShot = GameObject.Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity).GetComponent<ProjectileController>();
         _currentShot.shooter = playerID;
-        if(photonView == null){ photonView = GetComponentInChildren<PhotonView>(); }
         
-        if(photonView){
-            _currentShot.owner = photonView.IsMine ? this : null;   
+        if( (photonView != null && photonView.IsMine) || !DataUtility.gameData.isNetworkedGame){
+            _currentShot.owner = this;   
         }
         else{
             _currentShot.owner = null;
@@ -269,6 +268,23 @@ public class PlayerController : MonoBehaviour
         OnUIShouldUpdate?.Invoke();
         invulnerable = true;
         Invoke("SwitchOfInv", 2.0f);
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(super);
+        }
+        else
+        {
+            float ls = (float)stream.ReceiveNext();
+
+            if(ls != super){
+                super = ls;
+                OnUIShouldUpdate?.Invoke();
+            }
+        }
     }
     #endregion
 }
