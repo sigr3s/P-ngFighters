@@ -31,6 +31,7 @@ public class GameController : MonoBehaviourPunCallbacks {
     [SerializeField] private Image player1SuperImage = null;
     [SerializeField] private Image player2HealthImage = null;
     [SerializeField] private Image player2SuperImage = null;
+    [SerializeField] private Image roundInfoImage = null;
     [SerializeField] private TMP_Text upperText = null;
     [SerializeField] private TMP_Text lowerText = null;
 
@@ -52,6 +53,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         SceneManager.LoadScene("Environment", LoadSceneMode.Additive);
         InstantiatePlayers();
         ResetHUD();
+        roundInfoImage.gameObject.SetActive(true);
         upperText.text = "Round 1";
         lowerText.text = "3";
         if(!DataUtility.gameData.isNetworkedGame){
@@ -107,6 +109,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         player1.health = 100.0f;
         player2.health = 100.0f;
         Debug.Log("Round "+currentRound+", Fight!");
+        roundInfoImage.gameObject.SetActive(true);
         upperText.text = "Round "+currentRound;
         lowerText.text = "3";
         yield return new WaitForSeconds(1.0f);
@@ -119,6 +122,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(1.0f);
         upperText.text = "";
         lowerText.text = "";
+        roundInfoImage.gameObject.SetActive(false);
 
         ongoingRound = true;
     }
@@ -132,11 +136,13 @@ public class GameController : MonoBehaviourPunCallbacks {
         if (player1.health <= 0.0f) {
             player2WonRounds++;
             Debug.Log("Player 2 won the round!");
+            roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Blue Player";
             lowerText.text = "Wins the Round!";
         } else if (player2.health <= 0.0f) {
             player1WonRounds++;
             Debug.Log("Player 1 won the round!");
+            roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Red Player";
             lowerText.text = "Wins the Round!";
         }
@@ -145,12 +151,14 @@ public class GameController : MonoBehaviourPunCallbacks {
         P2CloserRoundImage.color = player2WonRounds > 0 ? DataUtility.GetColorFor(PlayerID.Player2) : Color.black;
 
         if (player1WonRounds >= 2) {
+            roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Finished!";
             lowerText.text = "Red Player Victory!";
             CenterRoundImage.color = DataUtility.GetColorFor(PlayerID.Player1);
             GameFinished(0);
         }
         else if (player2WonRounds >= 2) {
+            roundInfoImage.gameObject.SetActive(true);
             upperText.text = "Finished!";
             lowerText.text = "Blue Player Victory!";
             CenterRoundImage.color = DataUtility.GetColorFor(PlayerID.Player2);
@@ -169,6 +177,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         player2HealthImage.fillAmount = 1.0f;
         upperText.text = "";
         lowerText.text = "";
+        roundInfoImage.gameObject.SetActive(false);
     }
 
     public virtual void GameFinished(int winnerId)
