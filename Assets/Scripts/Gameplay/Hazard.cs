@@ -24,7 +24,9 @@ public class Hazard : MonoBehaviour
     public LayerMask Player;
 
     [SerializeField] private List<PowerUP> powerUps = new List<PowerUP>();
-    
+    [SerializeField] private GameObject destroyEffect = null;
+    [SerializeField] private GameObject throwEffect = null;
+
     private RaycastHit[] hits = new RaycastHit[10];
     private int hitCount = 0;
     private HazardSpawner spawner;
@@ -184,6 +186,9 @@ public class Hazard : MonoBehaviour
         {
             throwSpeed = new Vector3(10.0f, 0.0f, 0.0f);
         }
+
+        var effect = Instantiate(throwEffect, transform.position, Quaternion.identity);
+        effect.transform.localScale *= HazardLevel/2f;
     }
 
     public void DestroyIfThrown()
@@ -191,6 +196,11 @@ public class Hazard : MonoBehaviour
         if (thrown) {
             TryDestroyHazard(PlayerID.NP);
         }
+    }
+    
+    private void OnDisable() {
+       var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+       effect.transform.localScale *= HazardLevel/3f;
     }
 
     #region PUN methods   

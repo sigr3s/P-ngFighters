@@ -59,16 +59,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public bool invulnerable = false;
     [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
-
-
     [SerializeField] private float moveSpeed = 8.0F;
     [SerializeField] private float gravity = 40.0F;
     private Vector3 _moveDirection = Vector3.zero;
     [Header("Projectiles")]
     [SerializeField] private GameObject projectilePrefab = null;
     [SerializeField] private Transform projectileOrigin = null;
-    private ProjectileController _currentShot = null;
 
+    [Header("Effects")]
+    public ParticleSystem system;
+
+    private ProjectileController _currentShot = null;
     private CharacterController _charaterController = null;
 
     private bool isLocal = true;
@@ -216,7 +217,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 OnUIShouldUpdate?.Invoke();
                 invulnerable = true;
                 GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
-
+                system.emissionRate = 0;
                 Invoke("SwitchOfInv", 2.0f);
             }
         }
@@ -283,6 +284,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void SwitchOfInv()
     {
         invulnerable = false;
+        system.emissionRate = 1;
         GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
     }
 
@@ -306,6 +308,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         OnUIShouldUpdate?.Invoke();
         invulnerable = true;
         GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
+        system.emissionRate = 0;
         Invoke("SwitchOfInv", 2.0f);
     }
 
