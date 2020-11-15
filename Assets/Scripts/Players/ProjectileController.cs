@@ -56,7 +56,7 @@ public class ProjectileController : MonoBehaviour
     public void Disable(int hazardLevel){
         alive = false;
         gameObject.SetActive(false);
-        owner?.ChargeSuper( Mathf.Pow(1.5f, (5.0f- hazardLevel)));
+        owner?.ChargeSuper( Mathf.Pow(1.5f, (10.0f- hazardLevel)));
     }
 
     private void OnDisable() {

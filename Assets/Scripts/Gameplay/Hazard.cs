@@ -45,22 +45,25 @@ public class Hazard : MonoBehaviour
         }
     }
     
-    public void Initialize(HazardSpawner hazardSpawner, int level, Transform t, PlayerID owner = PlayerID.NP, float dir = 1)
+    public void Initialize(HazardSpawner hazardSpawner, int level, Vector3 pos, PlayerID owner = PlayerID.NP, float dir = 1)
     {
         spawner = hazardSpawner;
 
         if(DataUtility.gameData.isNetworkedGame){
-            PunTools.PhotonRpcMine(view, "RPC_Initialize", RpcTarget.AllBuffered, level, t.position, owner, dir);
+            PunTools.PhotonRpcMine(view, "RPC_Initialize", RpcTarget.AllBuffered, level, pos, owner, dir);
         }
         else{
             gameObject.SetActive(true);
             transform.localScale = level*scaleFactor*Vector3.one;
-            transform.position = t.position;
+            transform.position = pos;
             xSpeed = speed * dir;
             ySpeed = gravity;
             HazardLevel = level;
             alive = true;
             hazardOwner = owner;
+
+            thrown = false;
+            throwSpeed = Vector3.zero;
 
             GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
         }
@@ -142,7 +145,7 @@ public class Hazard : MonoBehaviour
                 Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
             }
             gameObject.SetActive(false);
-            spawner.HazardDestroyed(HazardLevel, transform, player, this);
+            spawner.HazardDestroyed(HazardLevel, transform.position, player, this);
             spawner.Return(this);
             return HazardLevel;
         }
@@ -194,7 +197,7 @@ public class Hazard : MonoBehaviour
     [PunRPC]
     protected void RPC_TryDestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
     {        
-        spawner?.HazardDestroyed(HazardLevel, transform, player, this);
+        spawner?.HazardDestroyed(HazardLevel, transform.position, player, this);
 
         if(generatePowerUp){
             Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
