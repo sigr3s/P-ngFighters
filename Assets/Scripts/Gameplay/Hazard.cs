@@ -204,6 +204,11 @@ public class Hazard : MonoBehaviour
        effect.transform.localScale *= HazardLevel/3f;
     }
 
+    private void OnDestroy() {
+       var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+       effect.transform.localScale *= HazardLevel/3f;
+    }
+
     #region PUN methods   
     [PunRPC]
     protected void RPC_TryDestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
