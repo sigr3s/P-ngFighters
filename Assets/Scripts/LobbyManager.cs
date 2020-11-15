@@ -22,7 +22,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] Button closeButton = null;
     string roomName;
     string gameScene = "Game";
-    bool initialized;
     #endregion
 
     #region Unity methods
@@ -34,7 +33,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if(PhotonNetwork.IsConnected)
+        if(!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
         }
@@ -49,8 +48,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     #region Private methods
     void Init()
     {
+        onlineModeButton.interactable = false;
         onlineUi.alpha = localUi.alpha = waitingUi.alpha = modeSelectionUi.alpha = 0;
         modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = localUi.interactable = localUi.blocksRaycasts = onlineUi.interactable = onlineUi.blocksRaycasts = waitingUi.interactable = waitingUi.blocksRaycasts = false;
+        StartCoroutine(InitScreen());
     }
 
     void AddListeners()
@@ -144,19 +145,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
     }
 
-    IEnumerator WaitForServerConnection()
+    IEnumerator InitScreen()
     {        
-        if(initialized){ yield break; }
-        yield return new WaitUntil(() => !slpashAnimation.isPlaying);
+        yield return new WaitForSeconds(1);
         bool buttonPressed = false;
         var anyKey = new InputAction(binding: "/*/<button>");
         anyKey.performed += (action) => buttonPressed = true;
         anyKey.Enable();
         yield return new WaitUntil(() => buttonPressed); 
         anyKey.Disable();
-        initialized = true;
         slpashAnimation.gameObject.SetActive(false);
-        Debug.Log(2);
         modeSelectionUi.DOFade(1, 0.5f).OnComplete(() => modeSelectionUi.interactable = modeSelectionUi.blocksRaycasts = true );
     }
 
@@ -175,11 +173,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     #endregion
         
     #region Photon override methods
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinLobby();          
-        StartCoroutine(WaitForServerConnection());
-    }
+    public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();       
+
+    public override void OnJoinedLobby() => onlineModeButton.interactable = true;   
 
     public override void OnJoinRandomFailed(short returnCode, string message) => CreateRoom();
 
