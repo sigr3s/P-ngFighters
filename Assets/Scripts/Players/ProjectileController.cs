@@ -46,7 +46,7 @@ public class ProjectileController : MonoBehaviour
                     }
                 }
                 else{
-                    Debug.LogWarning("You not owner huh>?");
+
                 }
             }
         }
