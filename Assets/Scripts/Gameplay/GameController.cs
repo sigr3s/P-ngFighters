@@ -38,13 +38,8 @@ public class GameController : MonoBehaviourPunCallbacks {
     private int currentRound = 0; // We asume a best of 3
     private int player1WonRounds = 0;
     private int player2WonRounds = 0;
-    PhotonView photonView;
     PlayerController player;
 
-    void Awake() 
-    {        
-        if(photonView == null){ photonView = GetComponent<PhotonView>(); }
-    }
 
     private void Start()
     {

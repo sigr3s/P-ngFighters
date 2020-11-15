@@ -92,14 +92,12 @@ public class LocalJoiner : MonoBehaviour
         switch(player){
             case PlayerID.Player1:
                 if(DataUtility.gameData.player1Device == null){
-                    Debug.Log("AA");
                     DataUtility.gameData.player1Device = device;
                     return true;
                 }
             break;
             case PlayerID.Player2:
                 if(DataUtility.gameData.player2Device == null){
-                    Debug.Log("BB");
                     DataUtility.gameData.player2Device = device;
                     return true;
                 }
@@ -114,12 +112,10 @@ public class LocalJoiner : MonoBehaviour
         if(gameLoading) return;
 
         if(DataUtility.gameData.player1Device != null && DataUtility.gameData.player1Device.deviceId == device.deviceId){
-            Debug.Log("Remove? AA");
             DataUtility.gameData.player1Device = null;
         }
 
         if(DataUtility.gameData.player2Device != null && DataUtility.gameData.player2Device.deviceId == device.deviceId){
-            Debug.Log("Remove? BB");
             DataUtility.gameData.player2Device = null;
         }
     }

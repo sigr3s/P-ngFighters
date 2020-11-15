@@ -15,6 +15,11 @@ public class ProjectileController : MonoBehaviour
     void Start()
     {
         _moveDirection.y = 10.0f;
+        Renderer[] renderParts = GetComponentsInChildren<Renderer>();
+
+        foreach(Renderer r in renderParts){
+            r.material.color = DataUtility.GetColorFor(shooter);
+        }
     }
 
     void Update()

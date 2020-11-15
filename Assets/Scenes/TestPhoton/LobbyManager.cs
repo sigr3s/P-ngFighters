@@ -142,7 +142,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {        
         if(initialized){ yield break; }
         yield return new WaitUntil(() => !slpashAnimation.isPlaying);
-        yield return new WaitUntil(() => Keyboard.current.anyKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame || Mouse.current.middleButton.wasPressedThisFrame); 
+        bool buttonPressed = false;
+        var anyKey = new InputAction(binding: "/*/<button>");
+        anyKey.performed += (action) => buttonPressed = true;
+        anyKey.Enable();
+        yield return new WaitUntil(() => buttonPressed); 
+        anyKey.Disable();
         initialized = true;
         slpashAnimation.gameObject.SetActive(false);
         Debug.Log(2);
