@@ -34,15 +34,22 @@ public class GameController : MonoBehaviourPunCallbacks {
     [SerializeField] private TMP_Text upperText = null;
     [SerializeField] private TMP_Text lowerText = null;
 
+    [SerializeField] private Image P1CloserRoundImage = null;
+    [SerializeField] private Image P2CloserRoundImage = null;
+    [SerializeField] private Image CenterRoundImage = null;
+
     // Round
     private int currentRound = 0; // We asume a best of 3
     private int player1WonRounds = 0;
     private int player2WonRounds = 0;
     PlayerController player;
 
+    bool ongoingRound = false;
+
 
     private void Start()
     {
+        SceneManager.LoadScene("Environment", LoadSceneMode.Additive);
         InstantiatePlayers();
         ResetHUD();
         upperText.text = "Round 1";
@@ -112,10 +119,14 @@ public class GameController : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(1.0f);
         upperText.text = "";
         lowerText.text = "";
+
+        ongoingRound = true;
     }
 
     public virtual IEnumerator EndRound()
     {
+        ongoingRound = false;
+        Debug.Log("Clear?");
         hazardSpawner.CleanAll();
 
         if (player1.health <= 0.0f) {
@@ -129,14 +140,20 @@ public class GameController : MonoBehaviourPunCallbacks {
             upperText.text = "Red Player";
             lowerText.text = "Wins the Round!";
         }
+
+        P1CloserRoundImage.color = player1WonRounds > 0 ? DataUtility.GetColorFor(PlayerID.Player1) : Color.black;
+        P2CloserRoundImage.color = player2WonRounds > 0 ? DataUtility.GetColorFor(PlayerID.Player2) : Color.black;
+
         if (player1WonRounds >= 2) {
             upperText.text = "Finished!";
             lowerText.text = "Red Player Victory!";
+            CenterRoundImage.color = DataUtility.GetColorFor(PlayerID.Player1);
             GameFinished(0);
         }
         else if (player2WonRounds >= 2) {
             upperText.text = "Finished!";
             lowerText.text = "Blue Player Victory!";
+            CenterRoundImage.color = DataUtility.GetColorFor(PlayerID.Player2);
             GameFinished(1);
         }
         else {
@@ -165,6 +182,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(3f);
         PhotonNetwork.LeaveRoom(true);
         SceneManager.LoadScene(0);
+        SceneManager.UnloadSceneAsync("Environment");
     }
 
     public virtual void OnUIShouldUpdate()
@@ -175,7 +193,9 @@ public class GameController : MonoBehaviourPunCallbacks {
         player2SuperImage.fillAmount = player2.super / 100.0f;
 
         if (player1.health <= 0.0f || player2.health <= 0.0f) {
-            StartCoroutine(EndRound());
+            if(ongoingRound){
+                StartCoroutine(EndRound());
+            }
         }
     }  
     

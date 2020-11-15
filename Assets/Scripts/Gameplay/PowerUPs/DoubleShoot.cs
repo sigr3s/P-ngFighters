@@ -8,5 +8,6 @@ public class DoubleShoot : PowerUP {
 
     public override void FinishPowerUP(PlayerController pc){
         pc.instantShoot = false;
+        Destroy(gameObject);
     }
 }

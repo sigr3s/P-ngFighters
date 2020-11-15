@@ -101,6 +101,7 @@ public class HazardSpawner : MonoBehaviour {
 
     public void Return(Hazard hazard)
     {
+        hazard.gameObject.SetActive(false);
         hazardPool.Enqueue(hazard);
     }
 
@@ -108,6 +109,9 @@ public class HazardSpawner : MonoBehaviour {
         for(int i = hazards.Count -1; i >= 0; i--){
             if(hazards[i] != null){
                 hazards[i].DestroyHazard();
+            }
+            else{
+                Debug.Log("Null?");
             }
         }
 

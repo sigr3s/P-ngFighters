@@ -24,7 +24,9 @@ public class Hazard : MonoBehaviour
     public LayerMask Player;
 
     [SerializeField] private List<PowerUP> powerUps = new List<PowerUP>();
-    
+    [SerializeField] private GameObject destroyEffect = null;
+    [SerializeField] private GameObject throwEffect = null;
+
     private RaycastHit[] hits = new RaycastHit[10];
     private int hitCount = 0;
     private HazardSpawner spawner;
@@ -157,23 +159,24 @@ public class Hazard : MonoBehaviour
             PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered);
         }   
         else{
-            Destroy(gameObject);
+            spawner.Return(this);
         }
     }
 
     public void Throw(bool left, PlayerID owner)
     {
         if(DataUtility.gameData.isNetworkedGame){
-            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left, owner);
+            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left, owner, transform.position);
         }
         else{
-            ThrowInternal(left, owner);
+            ThrowInternal(left, owner, transform.position);
         }
     }
 
-    private void ThrowInternal(bool left, PlayerID owner){
+    private void ThrowInternal(bool left, PlayerID owner, Vector3 positon){
         this.hazardOwner = owner;
         GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+        transform.position = positon;
 
         thrown = true;
         if (left)
@@ -184,6 +187,9 @@ public class Hazard : MonoBehaviour
         {
             throwSpeed = new Vector3(10.0f, 0.0f, 0.0f);
         }
+
+        var effect = Instantiate(throwEffect, transform.position, Quaternion.identity);
+        effect.transform.localScale *= HazardLevel/2f;
     }
 
     public void DestroyIfThrown()
@@ -191,6 +197,16 @@ public class Hazard : MonoBehaviour
         if (thrown) {
             TryDestroyHazard(PlayerID.NP);
         }
+    }
+    
+    private void OnDisable() {
+       var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+       effect.transform.localScale *= HazardLevel/3f;
+    }
+
+    private void OnDestroy() {
+       var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+       effect.transform.localScale *= HazardLevel/3f;
     }
 
     #region PUN methods   
@@ -228,8 +244,8 @@ public class Hazard : MonoBehaviour
     }
 
     [PunRPC]
-    protected void RPC_ThrowHazard(bool left, PlayerID owner){
-        ThrowInternal(left, owner);
+    protected void RPC_ThrowHazard(bool left, PlayerID owner, Vector3 postiion){
+        ThrowInternal(left, owner, postiion);
     }
     #endregion
 }

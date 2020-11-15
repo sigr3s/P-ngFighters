@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Hazard
-  m_Shader: {fileID: -6465566751694194690, guid: a06e080a52b2a8245b19d936d97a7a05,
+  m_Shader: {fileID: -6465566751694194690, guid: 945bee19777553145a5889a3b95c47dd,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,6 +40,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - Texture2D_938C7712:
         m_Texture: {fileID: 2800000, guid: b28381ec2a3dce5459a8fd396a0eb560, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_9DDDF552:
+        m_Texture: {fileID: 2800000, guid: a1454d7237641fa49a7f66d6bee624ad, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_D904F502:
@@ -75,6 +79,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_82ADD3F3: 0.5
     - Vector1_DB940B55: 0
     - _AlphaClip: 0
     - _Blend: 0

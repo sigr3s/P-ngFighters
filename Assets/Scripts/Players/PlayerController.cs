@@ -59,16 +59,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public bool invulnerable = false;
     [Header("Movement")]
     [SerializeField] private float jumpSpeed = 18.0F;
-
-
     [SerializeField] private float moveSpeed = 8.0F;
     [SerializeField] private float gravity = 40.0F;
+    [SerializeField] private Animator animator = null;
     private Vector3 _moveDirection = Vector3.zero;
     [Header("Projectiles")]
     [SerializeField] private GameObject projectilePrefab = null;
     [SerializeField] private Transform projectileOrigin = null;
-    private ProjectileController _currentShot = null;
 
+    [Header("Effects")]
+    public ParticleSystem system;
+
+    private ProjectileController _currentShot = null;
     private CharacterController _charaterController = null;
 
     private bool isLocal = true;
@@ -109,10 +111,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         GetComponent<PlayerInput>().enabled = isLocal;
 
+        SetColor(DataUtility.GetColorFor(playerID));
         _charaterController = GetComponent<CharacterController>();
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
         _moveDirection = Vector3.zero;
+    }
+
+    private void SetColor(Color c){
+        Renderer[] renderes = GetComponentsInChildren<Renderer>();
+
+        foreach(var r in renderes){
+            r.material.color = c;
+        }
     }
 
     void Update()
@@ -129,13 +139,25 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         var move = m_MoveAction.ReadValue<Vector2>();
         if (_charaterController.isGrounded && move.y > 0.4f) {
             _moveDirection.y = jumpSpeed;
+            animator.SetTrigger("jump");
         }
         _moveDirection.y -= gravity * Time.deltaTime;
         _moveDirection.x = moveSpeed * move.x;
         _charaterController.Move(_moveDirection * Time.deltaTime);
+        
+        if(Mathf.Abs(_moveDirection.x) > 1){
+            animator.SetBool("forward",(m_otherPlayer.transform.position.x - transform.position.x) * _moveDirection.x > 0 ? true : false);
+            animator.SetBool("backwards",(m_otherPlayer.transform.position.x - transform.position.x) * _moveDirection.x > 0 ? false : true);
+        }
+        else{
+            animator.SetBool("forward",false);
+            animator.SetBool("backwards",false);
+        }
+
         // Fire
         if(m_FireAction.triggered && throwHazard != null){
             throwHazard.Throw( transform.forward.x > 0 ? false : true, playerID);
+            animator.SetTrigger("shoot");
         }
         else if (m_FireAction.triggered && _charaterController.isGrounded) {
             if (_currentShot == null || !_currentShot.alive){
@@ -215,8 +237,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 health -= amount;
                 OnUIShouldUpdate?.Invoke();
                 invulnerable = true;
-                GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
-
+                SetColor(DataUtility.gameData.PlayerInvColor);
+                system.emissionRate = 0;
                 Invoke("SwitchOfInv", 2.0f);
             }
         }
@@ -283,7 +305,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void SwitchOfInv()
     {
         invulnerable = false;
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
+        system.emissionRate = 1;
+        SetColor(DataUtility.GetColorFor(playerID));
     }
 
     #region PUN methods   
@@ -305,7 +328,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         health -= amount;
         OnUIShouldUpdate?.Invoke();
         invulnerable = true;
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
+        SetColor(DataUtility.gameData.PlayerInvColor);
+        system.emissionRate = 0;
         Invoke("SwitchOfInv", 2.0f);
     }
 
