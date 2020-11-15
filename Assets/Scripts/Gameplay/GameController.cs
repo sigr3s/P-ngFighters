@@ -145,6 +145,16 @@ public class GameController : MonoBehaviour {
             {
                 playerController.Initialize((PlayerID)team, false);
             }
+
+            if(playerController.playerID == PlayerID.Player1)
+            {
+                player1 = playerController;
+            }
+            
+            if(playerController.playerID == PlayerID.Player2)
+            {
+                player2 = playerController;
+            }
         }
     }
 }
