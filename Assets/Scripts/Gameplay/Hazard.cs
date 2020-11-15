@@ -128,11 +128,10 @@ public class Hazard : MonoBehaviour
 
     public bool TryDestroyHazard(PlayerID player){
         if(player == hazardOwner){ 
-            Debug.Log("Can not destroy?");
             return false;
         }
 
-        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.75f;
+        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.9f;
         int powerUp = UnityEngine.Random.Range(0, powerUps.Count);
 
         if(DataUtility.gameData.isNetworkedGame){
