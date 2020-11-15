@@ -216,7 +216,8 @@ public class PlayerController : MonoBehaviour
     {        
         InternalShootProjectile();
     }
-
+    
+    [PunRPC]
     protected void RPC_Damage(float amount)
     {        
         health -= amount;
