@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   NoPlayerColor: {r: 1, g: 1, b: 1, a: 1}
-  Player1Color: {r: 1, g: 0, b: 0, a: 1}
-  Player2Color: {r: 0, g: 0, b: 1, a: 1}
+  Player1Color: {r: 0.69803923, g: 0.003921569, b: 0.003921569, a: 1}
+  Player2Color: {r: 0.023529414, g: 0.4901961, b: 0.7568628, a: 1}
+  PlayerInvColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   isNetworkedGame: 0

@@ -159,7 +159,7 @@ public class Hazard : MonoBehaviour
             PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered);
         }   
         else{
-            Destroy(gameObject);
+            spawner.Return(this);
         }
     }
 

@@ -110,10 +110,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         GetComponent<PlayerInput>().enabled = isLocal;
 
+        SetColor(DataUtility.GetColorFor(playerID));
         _charaterController = GetComponent<CharacterController>();
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
         initialized = true;
         _moveDirection = Vector3.zero;
+    }
+
+    private void SetColor(Color c){
+        Renderer[] renderes = GetComponentsInChildren<Renderer>();
+
+        foreach(var r in renderes){
+            r.material.color = c;
+        }
     }
 
     void Update()
@@ -216,7 +224,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 health -= amount;
                 OnUIShouldUpdate?.Invoke();
                 invulnerable = true;
-                GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
+                SetColor(DataUtility.gameData.PlayerInvColor);
                 system.emissionRate = 0;
                 Invoke("SwitchOfInv", 2.0f);
             }
@@ -285,7 +293,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         invulnerable = false;
         system.emissionRate = 1;
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
+        SetColor(DataUtility.GetColorFor(playerID));
     }
 
     #region PUN methods   
@@ -307,7 +315,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         health -= amount;
         OnUIShouldUpdate?.Invoke();
         invulnerable = true;
-        GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
+        SetColor(DataUtility.gameData.PlayerInvColor);
         system.emissionRate = 0;
         Invoke("SwitchOfInv", 2.0f);
     }
