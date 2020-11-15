@@ -41,6 +41,9 @@ MonoBehaviour:
   - RPC_ShootProjectile
   - RPC_DestroyHazard
   - RPC_Initialize
+  - RPC_GetTeam
+  - RPC_SendTeam
+  - RPC_UpdateTeam
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -31,6 +31,13 @@ public class GameController : MonoBehaviour {
     private int currentRound = 1; // We asume a best of 3
     private int player1WonRounds = 0;
     private int player2WonRounds = 0;
+    PhotonView photonView;
+    PlayerController player;
+
+    void Awake() 
+    {        
+        if(photonView == null){ photonView = GetComponent<PhotonView>(); }
+    }
 
     private void Start()
     {
@@ -39,7 +46,8 @@ public class GameController : MonoBehaviour {
         Debug.Log("Round 1, Fight!");
     }
 
-    private void OnDestroy()
+
+        private void OnDestroy()
     {
         player1.OnUIShouldUpdate -= OnUIShouldUpdate;
         player2.OnUIShouldUpdate -= OnUIShouldUpdate;
@@ -47,10 +55,13 @@ public class GameController : MonoBehaviour {
 
     public virtual void InstantiatePlayers()
     {
-        if(DataUtility.gameData.isNetworkedGame){
-            Debug.LogWarning("NETWORK SPAWN PLAYERS GOES HERE!");
-            var player1 = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), Player1Spawn.transform.position, Quaternion.identity);
-            player1.GetComponentInChildren<PlayerController>().Initialize(PlayerID.Player1, true);
+        if(DataUtility.gameData.isNetworkedGame)
+        {            
+            Vector3 pos = PhotonNetwork.IsMasterClient ? Player1Spawn.transform.position : Player2Spawn.transform.position;            
+            player = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), pos, Quaternion.identity).GetComponentInChildren<PlayerController>();
+            player.Initialize(PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2, true);
+            photonView.RPC("RPC_SendTeam", RpcTarget.OthersBuffered, PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2);
+            player.OnUIShouldUpdate += OnUIShouldUpdate;
         }
         else {
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,
@@ -122,6 +133,18 @@ public class GameController : MonoBehaviour {
 
         if (player1.health <= 0.0f || player2.health <= 0.0f) {
             EndRound();
+        }
+    }  
+    
+    [PunRPC]
+    void RPC_SendTeam(int team)
+    {        
+        foreach (var playerController in FindObjectsOfType<PlayerController>())
+        {
+            if(playerController != player)
+            {
+                playerController.Initialize((PlayerID)team, false);
+            }
         }
     }
 }
