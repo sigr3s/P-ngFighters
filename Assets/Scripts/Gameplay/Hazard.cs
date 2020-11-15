@@ -244,7 +244,7 @@ public class Hazard : MonoBehaviour
     }
 
     [PunRPC]
-    protected void RPC_ThrowHazard(bool left, Vector3 postiion, PlayerID owner){
+    protected void RPC_ThrowHazard(bool left, PlayerID owner, Vector3 postiion){
         ThrowInternal(left, owner, postiion);
     }
     #endregion
