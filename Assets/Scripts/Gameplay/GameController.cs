@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameController : MonoBehaviour {
 
@@ -66,7 +67,6 @@ public class GameController : MonoBehaviour {
             player = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), pos, Quaternion.identity).GetComponentInChildren<PlayerController>();
             player.Initialize(PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2, true);
             photonView.RPC("RPC_SendTeam", RpcTarget.OthersBuffered, PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2);
-            player.OnUIShouldUpdate += OnUIShouldUpdate;
         }
         else {
             PlayerInput player1Input = PlayerInput.Instantiate(PlayerPrefab, playerIndex: 0, splitScreenIndex: -1,
@@ -130,6 +130,12 @@ public class GameController : MonoBehaviour {
     public virtual void GameFinished(int winnerId)
     {
         Debug.Log("Player "+(winnerId+1)+" won the game!!!");
+
+        StartCoroutine(LeaveGame());
+    }
+
+    private IEnumerator LeaveGame(){
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(0);
     }
 
@@ -167,6 +173,8 @@ public class GameController : MonoBehaviour {
         }
 
         if(player1 != null && player2 != null){
+            player1.OnUIShouldUpdate += OnUIShouldUpdate;
+            player2.OnUIShouldUpdate += OnUIShouldUpdate; 
             StartNewRound();
         }
     }
