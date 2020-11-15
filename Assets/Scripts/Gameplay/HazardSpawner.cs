@@ -30,22 +30,11 @@ public class HazardSpawner : MonoBehaviour {
     }
 
     public void StartRound(){
-        if(DataUtility.gameData.isNetworkedGame){
-           if(!PhotonNetwork.IsMasterClient) return;
+        if(DataUtility.gameData.isNetworkedGame && !PhotonNetwork.IsMasterClient) return;
            
-            for(int i = 0; i < hazardSpawnPoints.Count; i ++){
-                var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), hazardSpawnPoints[i].position, Quaternion.identity);
-                hp.GetComponent<Hazard>().Initialize(this, hazardLevel, hazardSpawnPoints[i]);
-                hazards.Add(hp.GetComponent<Hazard>());
-            }
+        for(int i = 0; i < hazardSpawnPoints.Count; i ++){
+            CreateHazard(hazardLevel, hazardSpawnPoints[i].position, PlayerID.NP);
         }
-        else{
-            for(int i = 0; i < hazardSpawnPoints.Count; i ++){
-                var h = GetPooledHazard();
-                h.Initialize(this, hazardLevel, hazardSpawnPoints[i]);
-                hazards.Add(h);
-            }
-        } 
     }
 
     private Hazard GetPooledHazard(){
@@ -72,58 +61,42 @@ public class HazardSpawner : MonoBehaviour {
         }
     }
 
-    public Hazard GetHazard(){
-        return GetPooledHazard();
-    }
-
-    public void HazardDestroyed(int hl, Transform t, PlayerID player, Hazard hazard){
+    public void HazardDestroyed(int hl, Vector3 pos, PlayerID player, Hazard hazard){
 
         hazards.Remove(hazard);
 
-        if(DataUtility.gameData.isNetworkedGame){
-            if(hl == 1){
-                lvl1Destroyed++;
-            }
-            else{
-                float dir = 1;
-                for(int i = 0; i < 2; i ++){
-                    var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), t.position, Quaternion.identity);
-                    hp.GetComponent<Hazard>().Initialize(this, hl - 1 , t, player, dir);
-                    dir *= -1;
-                    hazards.Add(hp.GetComponent<Hazard>());
-                }
-            }
-
-            if(lvl1Destroyed == Math.Pow(2, hazardLevel -1)){
-                int pos = UnityEngine.Random.Range(0, hazardSpawnPoints.Count);
-
-                var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), hazardSpawnPoints[pos].position, Quaternion.identity);
-                hp.GetComponent<Hazard>().Initialize(this, hazardLevel, hazardSpawnPoints[pos]);
-                lvl1Destroyed = 0;
-                hazards.Add(hp.GetComponent<Hazard>());
-            } 
+        if(hl == 1){
+            lvl1Destroyed++;
         }
         else{
-            if(hl == 1){
-                lvl1Destroyed++;
+            float dir = 1;
+            for(int i = 0; i < 2; i ++){
+                CreateHazard(hl - 1 , pos, player, dir);
+                dir *= -1;
             }
-            else{
-                float dir = 1;
-                for(int i = 0; i < 2; i ++){
-                    var h = GetPooledHazard();
-                    h.Initialize(this, hl - 1 , t, player, dir);
-                    dir *= -1;
-                    hazards.Add(h);
-                }
-            }
-            
-            if(lvl1Destroyed == Math.Pow(2, hazardLevel -1)){
-                var h = GetPooledHazard();
-                h.Initialize(this, hazardLevel, hazardSpawnPoints[UnityEngine.Random.Range(0, hazardSpawnPoints.Count)]);
-                lvl1Destroyed = 0;
-                hazards.Add(h);
-            }   
         }
+
+        if(lvl1Destroyed == Math.Pow(2, hazardLevel -1)){
+            int p = UnityEngine.Random.Range(0, hazardSpawnPoints.Count);
+            CreateHazard(hazardLevel, hazardSpawnPoints[p].position, PlayerID.NP);
+            lvl1Destroyed = 0;
+        } 
+    }
+
+    private Hazard CreateHazard(int level, Vector3 pos, PlayerID owner = PlayerID.NP, float dir = 1){
+        Hazard hazard = null;
+        if(DataUtility.gameData.isNetworkedGame){
+            var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), pos, Quaternion.identity);
+            hazard = hp.GetComponent<Hazard>();
+        }
+        else{
+            hazard = GetPooledHazard();
+        }
+
+        hazard.Initialize(this, level, pos, owner, dir);
+        hazards.Add(hazard);
+
+        return hazard;
     }
 
     public void Return(Hazard hazard)
@@ -141,5 +114,10 @@ public class HazardSpawner : MonoBehaviour {
         hazards = new List<Hazard>();
 
         lvl1Destroyed = 0;
+    }
+
+    public void CreateThrowHazard(int level, Vector3 pos, PlayerID owner, bool left){
+        Hazard h = CreateHazard(level, pos, owner);
+        h.Throw(left, owner);
     }
 }

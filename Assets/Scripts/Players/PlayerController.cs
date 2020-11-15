@@ -45,6 +45,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private InputAction m_SuperAction{
+        get {
+            return m_PlayerInput.actions["super"];
+        }
+    }
+
     public Action OnUIShouldUpdate;
 
     // Attributes
@@ -76,6 +82,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public bool instantShoot = false;
 
+    private HazardSpawner spawner;
+
     private PlayerController _other = null;
 
     private PlayerController m_otherPlayer {
@@ -94,9 +102,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
+    public void Initialize(PlayerID playerID, bool isLocal, HazardSpawner spawner){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
         this.isLocal = isLocal;
+        this.spawner = spawner;
 
         GetComponent<PlayerInput>().enabled = isLocal;
 
@@ -137,6 +146,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
 
+        if(m_SuperAction.triggered && super >= 100f){
+            
+            super = 0f;
+            OnUIShouldUpdate?.Invoke();
+
+            if(DataUtility.gameData.isNetworkedGame){
+                PunTools.PhotonRpcMine(photonView, "RPC_Super", RpcTarget.AllBuffered);
+            }
+            else{
+                DoSuperInteral();
+            }
+        }
+
         transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
         if(m_otherPlayer != null)
@@ -145,11 +167,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private void DoSuperInteral()
+    {
+        for(int i = 0; i < 3; i ++){
+            spawner.CreateThrowHazard(1, transform.position + new Vector3(0, 3f*i, 0), playerID, transform.forward.x > 0 ? false : true);
+        }
+    }
+
     private void ShootProjectile()
     {
         if(DataUtility.gameData.isNetworkedGame)
         {
-            PunTools.PhotonRpcMine(photonView, "RPC_ShootProjectile", RpcTarget.AllBuffered);
+            PunTools.PhotonRpcMine(photonView, "RPC_ShootProjectile", RpcTarget.MasterClient);
         }
         else
         {
@@ -186,6 +215,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 health -= amount;
                 OnUIShouldUpdate?.Invoke();
                 invulnerable = true;
+                GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
+
                 Invoke("SwitchOfInv", 2.0f);
             }
         }
@@ -252,6 +283,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void SwitchOfInv()
     {
         invulnerable = false;
+        GetComponentInChildren<Renderer>().material.color =  DataUtility.GetColorFor(playerID);
     }
 
     #region PUN methods   
@@ -260,6 +292,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {        
         InternalShootProjectile();
     }
+
+    [PunRPC]
+    protected void RPC_Super()
+    {        
+        DoSuperInteral();
+    }
     
     [PunRPC]
     protected void RPC_Damage(float amount)
@@ -267,6 +305,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         health -= amount;
         OnUIShouldUpdate?.Invoke();
         invulnerable = true;
+        GetComponentInChildren<Renderer>().material.color =  DataUtility.gameData.PlayerInvColor;
         Invoke("SwitchOfInv", 2.0f);
     }
 

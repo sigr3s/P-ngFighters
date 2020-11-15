@@ -71,7 +71,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         {            
             Vector3 pos = PhotonNetwork.IsMasterClient ? Player1Spawn.transform.position : Player2Spawn.transform.position;            
             player = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), pos, Quaternion.identity).GetComponentInChildren<PlayerController>();
-            player.Initialize(PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2, true);
+            player.Initialize(PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2, true, hazardSpawner);
             photonView.RPC("RPC_SendTeam", RpcTarget.OthersBuffered, PhotonNetwork.IsMasterClient ? PlayerID.Player1 : PlayerID.Player2);
         }
         else {
@@ -79,7 +79,7 @@ public class GameController : MonoBehaviourPunCallbacks {
             controlScheme: null, pairWithDevice: DataUtility.gameData.player1Device);
 
             player1 = player1Input.GetComponentInChildren<PlayerController>();
-            player1.Initialize(PlayerID.Player1, true);
+            player1.Initialize(PlayerID.Player1, true, hazardSpawner);
             player1.transform.position = Player1Spawn.transform.position;
             player1.OnUIShouldUpdate += OnUIShouldUpdate;
 
@@ -87,7 +87,7 @@ public class GameController : MonoBehaviourPunCallbacks {
                 controlScheme: null, pairWithDevice: DataUtility.gameData.player2Device);
                     
             player2 = player2Input.GetComponentInChildren<PlayerController>();
-            player2.Initialize(PlayerID.Player2, true);
+            player2.Initialize(PlayerID.Player2, true, hazardSpawner);
             player2.transform.position = Player2Spawn.transform.position;
             player2.OnUIShouldUpdate += OnUIShouldUpdate;
         }
@@ -185,7 +185,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         {
             if(playerController != player)
             {
-                playerController.Initialize((PlayerID)team, false);
+                playerController.Initialize((PlayerID)team, false, hazardSpawner);
             }
 
             if(playerController.playerID == PlayerID.Player1)
