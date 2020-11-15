@@ -44,6 +44,7 @@ MonoBehaviour:
   - RPC_SendTeam
   - RPC_Damage
   - RPC_ThrowHazard
+  - RPC_TryDestroyHazard
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
