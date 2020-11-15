@@ -6,8 +6,9 @@ using Photon.Pun;
 using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Photon.Realtime;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviourPunCallbacks {
 
     [Header("Always")]
     public Transform Player1Spawn;
@@ -50,6 +51,12 @@ public class GameController : MonoBehaviour {
         if(!DataUtility.gameData.isNetworkedGame){
             StartNewRound();
         }
+    }
+
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        GameFinished(player1 != null ? 0 : 1);
     }
 
 
