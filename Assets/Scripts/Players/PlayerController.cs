@@ -136,7 +136,9 @@ public class PlayerController : MonoBehaviour
 
         transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
-        transform.forward = new Vector3((m_otherPlayer.transform.position.x - transform.position.x) > 0 ? 1 : -1, 0 ,0);
+        if(m_otherPlayer != null){
+            transform.forward = new Vector3((m_otherPlayer.transform.position.x - transform.position.x) > 0 ? 1 : -1, 0 ,0);
+        }
     }
 
     private void ShootProjectile()
