@@ -76,7 +76,6 @@ public class HazardSpawner : MonoBehaviour {
         return GetPooledHazard();
     }
 
-    //TODO: Network this? spawn powerups
     public void HazardDestroyed(int hl, Transform t, PlayerID player, Hazard hazard){
 
         hazards.Remove(hazard);
@@ -135,7 +134,7 @@ public class HazardSpawner : MonoBehaviour {
     public void CleanAll(){
         for(int i = hazards.Count -1; i >= 0; i--){
             if(hazards[i] != null){
-                Destroy(hazards[i].gameObject);
+                hazards[i].DestroyHazard();
             }
         }
 
