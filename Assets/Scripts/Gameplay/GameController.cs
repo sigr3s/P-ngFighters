@@ -49,6 +49,7 @@ public class GameController : MonoBehaviourPunCallbacks {
 
     private void Start()
     {
+        SceneManager.LoadScene("Environment", LoadSceneMode.Additive);
         InstantiatePlayers();
         ResetHUD();
         upperText.text = "Round 1";
@@ -181,6 +182,7 @@ public class GameController : MonoBehaviourPunCallbacks {
         yield return new WaitForSeconds(3f);
         PhotonNetwork.LeaveRoom(true);
         SceneManager.LoadScene(0);
+        SceneManager.UnloadSceneAsync("Environment");
     }
 
     public virtual void OnUIShouldUpdate()
