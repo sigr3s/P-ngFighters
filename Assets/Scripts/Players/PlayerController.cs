@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     [Header("Effects")]
     public ParticleSystem system;
+    public AudioClip damageClip;
 
     private ProjectileController _currentShot = null;
     private CharacterController _charaterController = null;
@@ -241,6 +242,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 SetColor(DataUtility.gameData.PlayerInvColor);
                 system.emissionRate = 0;
                 Invoke("SwitchOfInv", 2.0f);
+                SoundManager.Instance.PlaySound(damageClip);
             }
         }
     }
@@ -332,6 +334,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         SetColor(DataUtility.gameData.PlayerInvColor);
         system.emissionRate = 0;
         Invoke("SwitchOfInv", 2.0f);
+        SoundManager.Instance.PlaySound(damageClip);
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

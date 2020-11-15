@@ -133,5 +133,10 @@ MonoBehaviour:
     type: 3}
   throwEffect: {fileID: 6857279002762747955, guid: e4dc1c507d696ce4997ea706be718c86,
     type: 3}
+  destroyClips:
+  - {fileID: 8300000, guid: 7154a4cc9b1c1e549b31a3c98579e4a7, type: 3}
+  - {fileID: 8300000, guid: 10211f2bd080eeb4e924174239808e09, type: 3}
+  - {fileID: 8300000, guid: 421d6228f710b434db5462b0c453ad68, type: 3}
+  - {fileID: 8300000, guid: ed70c6d46139f0846a1c3d5f4822c7c2, type: 3}
   thrown: 0
   throwSpeed: {x: 0, y: 0, z: 0}

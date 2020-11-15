@@ -143,6 +143,7 @@ MonoBehaviour:
     type: 3}
   projectileOrigin: {fileID: 5030901733439307811}
   system: {fileID: 481062673605237896}
+  damageClip: {fileID: 8300000, guid: 2827a54d04ca42b41901599d42b1ad1f, type: 3}
   instantShoot: 0
 --- !u!114 &7258452435503028159
 MonoBehaviour:

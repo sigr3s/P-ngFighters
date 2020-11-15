@@ -26,6 +26,7 @@ public class Hazard : MonoBehaviour
     [SerializeField] private List<PowerUP> powerUps = new List<PowerUP>();
     [SerializeField] private GameObject destroyEffect = null;
     [SerializeField] private GameObject throwEffect = null;
+    [SerializeField] private List<AudioClip> destroyClips = new List<AudioClip>();
 
     private RaycastHit[] hits = new RaycastHit[10];
     private int hitCount = 0;
@@ -201,11 +202,13 @@ public class Hazard : MonoBehaviour
     private void OnDisable() {
        var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
        effect.transform.localScale *= HazardLevel/3f;
+       SoundManager.Instance.PlaySound(destroyClips[UnityEngine.Random.Range(0, destroyClips.Count)]);
     }
 
     private void OnDestroy() {
        var effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
        effect.transform.localScale *= HazardLevel/3f;
+       SoundManager.Instance.PlaySound(destroyClips[UnityEngine.Random.Range(0, destroyClips.Count)]);
     }
 
     #region PUN methods   
