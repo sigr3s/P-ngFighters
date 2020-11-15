@@ -163,6 +163,7 @@ public class GameController : MonoBehaviourPunCallbacks {
 
     private IEnumerator LeaveGame(){
         yield return new WaitForSeconds(3f);
+        PhotonNetwork.LeaveRoom(true);
         SceneManager.LoadScene(0);
     }
 
