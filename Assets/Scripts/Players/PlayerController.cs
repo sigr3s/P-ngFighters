@@ -153,8 +153,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!invulnerable)
         {
-            if(DataUtility.gameData.isNetworkedGame && photonView.IsMine){
-                Debug.LogError("Damagerino");
+            if(DataUtility.gameData.isNetworkedGame){
+                PunTools.PhotonRpcMine(photonView, "RPC_Damage", RpcTarget.AllBuffered);
             }
             else
             {
@@ -197,13 +197,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other) {
         //Damage, Powe UP
-        if(DataUtility.gameData.isNetworkedGame) {
-            //RWT call?
-        }
-        else {
+        if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
-            if (hazard != null && m_FireAction.triggered && hazard.hazardOwner == playerID) 
+            if (hazard != null && m_FireAction.triggered && hazard.hazardOwner == playerID){
                 hazard.Throw(false);
+            }
         }
     }
 
@@ -217,6 +215,14 @@ public class PlayerController : MonoBehaviour
     protected void RPC_ShootProjectile()
     {        
         InternalShootProjectile();
+    }
+
+    protected void RPC_Damage(float amount)
+    {        
+        health -= amount;
+        OnUIShouldUpdate?.Invoke();
+        invulnerable = true;
+        Invoke("SwitchOfInv", 2.0f);
     }
     #endregion
 }

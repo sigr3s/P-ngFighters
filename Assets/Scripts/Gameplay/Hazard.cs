@@ -143,6 +143,15 @@ public class Hazard : MonoBehaviour
 
     public void Throw(bool left)
     {
+        if(DataUtility.gameData.isNetworkedGame){
+            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left);
+        }
+        else{
+            ThrowInternal(left);
+        }
+    }
+
+    private void ThrowInternal(bool left){
         thrown = true;
         if (left)
         {
@@ -187,6 +196,11 @@ public class Hazard : MonoBehaviour
         hazardOwner = owner;
 
         GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+    }
+
+    [PunRPC]
+    protected void RPC_ThrowHazard(bool left){
+        ThrowInternal(left);
     }
     #endregion
 }
