@@ -71,6 +71,24 @@ public class PlayerController : MonoBehaviour
     PhotonView photonView;
     public bool instantShoot = false;
 
+    private PlayerController _other = null;
+
+    private PlayerController m_otherPlayer {
+        get{
+            if(_other == null){
+                var pcs = FindObjectsOfType<PlayerController>();
+
+                foreach(var pc in pcs){
+                    if(pc != this){
+                        _other = pc;
+                    }
+                }
+            }
+
+            return _other;
+        }
+    }
+
     public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
         this.isLocal = isLocal;
@@ -117,6 +135,8 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+
+        transform.forward = new Vector3((m_otherPlayer.transform.position.x - transform.position.x) > 0 ? 1 : -1, 0 ,0);
     }
 
     private void ShootProjectile()
@@ -158,7 +178,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Au!");
                 health -= amount;
                 OnUIShouldUpdate?.Invoke();
                 invulnerable = true;
