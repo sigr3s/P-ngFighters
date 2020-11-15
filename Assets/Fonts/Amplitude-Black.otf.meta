@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e8d083796f2d4d5468b4745212c77849
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Amplitude-Black
+  fontNames:
+  - Amplitude-Black
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 75ba986935257ef4a9c79288baa14ab6, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
