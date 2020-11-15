@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             OnUIShouldUpdate?.Invoke();
 
             if(DataUtility.gameData.isNetworkedGame){
-                PunTools.PhotonRpcMine(photonView, "RPC_Super", RpcTarget.AllBuffered);
+                PunTools.PhotonRpcMine(photonView, "RPC_Super", RpcTarget.MasterClient);
             }
             else{
                 DoSuperInteral();
@@ -178,7 +178,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if(DataUtility.gameData.isNetworkedGame)
         {
-            PunTools.PhotonRpcMine(photonView, "RPC_ShootProjectile", RpcTarget.MasterClient);
+            PunTools.PhotonRpcMine(photonView, "RPC_ShootProjectile", RpcTarget.AllBuffered);
         }
         else
         {

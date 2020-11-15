@@ -85,7 +85,7 @@ public class HazardSpawner : MonoBehaviour {
 
     private Hazard CreateHazard(int level, Vector3 pos, PlayerID owner = PlayerID.NP, float dir = 1){
         Hazard hazard = null;
-        if(DataUtility.gameData.isNetworkedGame){
+        if(DataUtility.gameData.isNetworkedGame && PhotonNetwork.IsMasterClient){
             var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), pos, Quaternion.identity);
             hazard = hp.GetComponent<Hazard>();
         }
