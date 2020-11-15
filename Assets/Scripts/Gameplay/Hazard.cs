@@ -22,10 +22,15 @@ public class Hazard : MonoBehaviour
     public LayerMask Vertical;
     public LayerMask Weapon;
     public LayerMask Player;
+
+    [SerializeField] private List<PowerUP> powerUps = new List<PowerUP>();
+    
     private RaycastHit[] hits = new RaycastHit[10];
     private int hitCount = 0;
     private HazardSpawner spawner;
     private bool alive = false;
+    public bool thrown = false;
+    public Vector3 throwSpeed = Vector3.zero;
 
     public static float HazardSimulationRate = 1f;
 
@@ -59,7 +64,7 @@ public class Hazard : MonoBehaviour
 
     private Vector3 prevPosition = Vector3.zero;
 
-    private void Update() 
+    private void FixedUpdate() 
     {
         if(DataUtility.gameData.isNetworkedGame){
             if(view == null){
@@ -73,7 +78,21 @@ public class Hazard : MonoBehaviour
     private void UpdatePosition(){
         if(!alive) return;
 
-        transform.position += new Vector3(xSpeed * Time.deltaTime * HazardSimulationRate, ySpeed * Time.deltaTime * HazardSimulationRate, 0f);
+        if (thrown) {
+            transform.position += throwSpeed * Time.deltaTime;
+            hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
+
+            for(int i = 0; i < hitCount; i++){
+                var h = hits[i];
+                
+                if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
+                    TryDestroyHazard(PlayerID.NP);
+                }
+            }
+            return;
+        }
+
+        transform.position += new Vector3(xSpeed * Time.fixedDeltaTime * HazardSimulationRate, ySpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f);
 
         hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
 
@@ -92,17 +111,17 @@ public class Hazard : MonoBehaviour
                     }
 
 
-                    transform.position += new Vector3(0, ySpeed * Time.deltaTime * HazardSimulationRate, 0f);
+                    transform.position += new Vector3(0, ySpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f);
                 }
                 else if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
                     xSpeed *= -1;
-                    transform.position += new Vector3(2* xSpeed * Time.deltaTime * HazardSimulationRate, 0f, 0f);
+                    transform.position += new Vector3(2* xSpeed * Time.fixedDeltaTime * HazardSimulationRate, 0f, 0f);
                 }
             }
         }
 
 
-        ySpeed = Mathf.Clamp(ySpeed + gravity*Time.deltaTime, gravity, -gravity * 3f);
+        ySpeed = Mathf.Clamp(ySpeed + gravity*Time.fixedDeltaTime, gravity, -gravity * 3f);
 
         prevPosition = transform.position;
     }
@@ -113,12 +132,17 @@ public class Hazard : MonoBehaviour
             return false;
         }
 
+        bool generatePowerUp = UnityEngine.Random.Range(0f, 1f) > 0.75f;
+        int powerUp = UnityEngine.Random.Range(0, powerUps.Count);
+
         if(DataUtility.gameData.isNetworkedGame){
-            Debug.Log("Call this?");
-            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player);
+            PunTools.PhotonRPC(view, "RPC_DestroyHazard", RpcTarget.AllBuffered, player, generatePowerUp , powerUp);
             return true;
         }   
         else{
+            if(generatePowerUp){
+                Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
+            }
             gameObject.SetActive(false);
             spawner.HazardDestroyed(HazardLevel, transform, player);
             spawner.Return(this);
@@ -126,17 +150,45 @@ public class Hazard : MonoBehaviour
         }
     }
 
-    public void Throw()
+    public void Throw(bool left)
     {
-        
+        if(DataUtility.gameData.isNetworkedGame){
+            PunTools.PhotonRPC(view, "RPC_ThrowHazard", RpcTarget.AllBuffered, left);
+        }
+        else{
+            ThrowInternal(left);
+        }
+    }
+
+    private void ThrowInternal(bool left){
+        thrown = true;
+        if (left)
+        {
+            throwSpeed = new Vector3(-10.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            throwSpeed = new Vector3(10.0f, 0.0f, 0.0f);
+        }
+    }
+
+    public void DestroyIfThrown()
+    {
+        if (thrown) {
+            TryDestroyHazard(PlayerID.NP);
+        }
     }
 
     #region PUN methods   
     [PunRPC]
-    protected void RPC_DestroyHazard(PlayerID player)
+    protected void RPC_DestroyHazard(PlayerID player, bool generatePowerUp, int powerUp)
     {        
-        Debug.Log("XDD?");
         spawner?.HazardDestroyed(HazardLevel, transform, player);
+
+        if(generatePowerUp){
+            Instantiate(powerUps[powerUp], transform.position, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
 
@@ -153,6 +205,11 @@ public class Hazard : MonoBehaviour
         hazardOwner = owner;
 
         GetComponent<Renderer>().material.color = DataUtility.GetColorFor(owner);
+    }
+
+    [PunRPC]
+    protected void RPC_ThrowHazard(bool left){
+        ThrowInternal(left);
     }
     #endregion
 }

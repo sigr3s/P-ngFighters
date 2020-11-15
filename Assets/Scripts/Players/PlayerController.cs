@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
     private bool initialized = false;
 
     PhotonView photonView;
+    public bool instantShoot = false;
 
     public void Initialize(PlayerID playerID, bool isLocal){ //TODO: Sync with alex on owner?
         this.playerID = playerID;
@@ -107,7 +108,12 @@ public class PlayerController : MonoBehaviour
         _charaterController.Move(_moveDirection * Time.deltaTime);
         // Fire
         if (m_FireAction.triggered) {
-            if (_currentShot == null || !_currentShot.alive) ShootProjectile();
+            if (_currentShot == null || !_currentShot.alive){
+                ShootProjectile();
+            }
+            else if(instantShoot){
+                ShootProjectile();
+            }
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
@@ -145,8 +151,12 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(float amount)
     {
-        if(isLocal){
-            if (!invulnerable)
+        if (!invulnerable)
+        {
+            if(DataUtility.gameData.isNetworkedGame){
+                PunTools.PhotonRpcMine(photonView, "RPC_Damage", RpcTarget.AllBuffered, amount);
+            }
+            else
             {
                 Debug.Log("Au!");
                 health -= amount;
@@ -159,25 +169,39 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         //Damage, Powe UP
-        if(DataUtility.gameData.isNetworkedGame) {
-            //RWT call?
-        }
-        else {
+        if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
-            if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP) 
-                Damage(20.0f);
+
+            if (hazard != null && hazard.hazardOwner != playerID && hazard.hazardOwner != PlayerID.NP){
+                
+                if(hazard.thrown){
+                    float pix = m_MoveAction.ReadValue<Vector2>().x;
+
+                    Debug.Log($"{pix}   {hazard.throwSpeed.x}");
+
+                    if( Mathf.Sign(hazard.throwSpeed.x) == Mathf.Sign(pix) && Mathf.Abs(pix) > 0.15f ){
+                        hazard.DestroyIfThrown();
+                    }
+                    else{
+                        Damage(20.0f);
+                        hazard.DestroyIfThrown();
+                    }
+                }
+                else{
+                    Damage(20.0f);
+                    hazard.DestroyIfThrown();
+                }
+            }
         }
     }
 
     private void OnTriggerStay(Collider other) {
         //Damage, Powe UP
-        if(DataUtility.gameData.isNetworkedGame) {
-            //RWT call?
-        }
-        else {
+        if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
-            if (hazard != null && hazard.hazardOwner == playerID) 
-                hazard.Throw();
+            if (hazard != null && m_FireAction.triggered && hazard.hazardOwner == playerID){
+                hazard.Throw(false);
+            }
         }
     }
 
@@ -191,6 +215,15 @@ public class PlayerController : MonoBehaviour
     protected void RPC_ShootProjectile()
     {        
         InternalShootProjectile();
+    }
+    
+    [PunRPC]
+    protected void RPC_Damage(float amount)
+    {        
+        health -= amount;
+        OnUIShouldUpdate?.Invoke();
+        invulnerable = true;
+        Invoke("SwitchOfInv", 2.0f);
     }
     #endregion
 }
