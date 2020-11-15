@@ -22,23 +22,9 @@ public class LocalJoiner : MonoBehaviour
     private void Start() {
         DataUtility.gameData.player1Device = null;
         DataUtility.gameData.player2Device = null;
-
-        var devices = InputSystem.devices.Where(x => x is Gamepad || x is Keyboard );
-
-        foreach(var d in devices){
-            GameObject go = Instantiate(prefab, content);
-            UIDevices.Add(d, go);
-            go.GetComponent<ControllerSide>().Initialize(d, this);
-        }
-
-        InputSystem.onDeviceChange += OnChange;
-
-        startAction = new InputAction();
-        startAction.AddBinding("<Gamepad>/Start");
-        startAction.AddBinding("<Keyboard>/Enter");
-        startAction.performed += OnStart;
-        startAction.Enable();
     }
+
+    private bool init = false;
 
     private void Update() {
         if(canvasGroup.interactable && DataUtility.gameData.player1Device != null && DataUtility.gameData.player2Device != null){
@@ -46,6 +32,28 @@ public class LocalJoiner : MonoBehaviour
         }
         else{
             startGame.SetActive(false);
+        }
+
+        if(canvasGroup.interactable){
+            if(!init){
+                var devices = InputSystem.devices.Where(x => x is Gamepad || x is Keyboard );
+
+                foreach(var d in devices){
+                    GameObject go = Instantiate(prefab, content);
+                    UIDevices.Add(d, go);
+                    go.GetComponent<ControllerSide>().Initialize(d, this);
+                }
+
+                InputSystem.onDeviceChange += OnChange;
+
+                startAction = new InputAction();
+                startAction.AddBinding("<Gamepad>/Start");
+                startAction.AddBinding("<Keyboard>/Enter");
+                startAction.performed += OnStart;
+                startAction.Enable();
+
+                init = true;
+            }
         }
     }
 
