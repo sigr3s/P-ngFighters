@@ -129,3 +129,9 @@ MonoBehaviour:
   powerUps:
   - {fileID: 6593416595631463528, guid: 2ed63d000987d8148bdd3cd8340fe19e, type: 3}
   - {fileID: 7117331155366580572, guid: f38c784ae26e03441ac39ad4cd75f1e4, type: 3}
+  destroyEffect: {fileID: 2970498634083480932, guid: c6fd77bbe3771e042bef81fe94523f4f,
+    type: 3}
+  throwEffect: {fileID: 6857279002762747955, guid: e4dc1c507d696ce4997ea706be718c86,
+    type: 3}
+  thrown: 0
+  throwSpeed: {x: 0, y: 0, z: 0}

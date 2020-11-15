@@ -139,6 +139,9 @@ MonoBehaviour:
   projectilePrefab: {fileID: 1163122444470639247, guid: ed2e9233014761640b0d83ea94ee5c12,
     type: 3}
   projectileOrigin: {fileID: 5030901733439307811}
+  reflectEffect: {fileID: 6857279002762747955, guid: e4dc1c507d696ce4997ea706be718c86,
+    type: 3}
+  system: {fileID: 481062673605237896}
   instantShoot: 0
 --- !u!114 &7258452435503028159
 MonoBehaviour:
@@ -265,6 +268,12 @@ PrefabInstance:
 --- !u!4 &481062673620443458 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 436724, guid: 3e068905aef3aa54f996a289374924fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 481062673620797622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &481062673605237896 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19829822, guid: 3e068905aef3aa54f996a289374924fb,
     type: 3}
   m_PrefabInstance: {fileID: 481062673620797622}
   m_PrefabAsset: {fileID: 0}
