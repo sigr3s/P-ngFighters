@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TestPhoton/TestPhotonIntegration.unity
+    path: Assets/Scenes/Lobby.unity
     guid: 9eeb78f39bd77684487cc8e111320ea1
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
