@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -567,6 +567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player1Spawn: {fileID: 1056572574}
   Player2Spawn: {fileID: 423523798}
+  hazardSpawner: {fileID: 2109815931}
   PlayerPrefab: {fileID: 6084678683803900618, guid: 5c0837d84dcb9994f982228ac048287c,
     type: 3}
   player1HealthImage: {fileID: 473081216407695312}
@@ -1474,6 +1475,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2109815931 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1003786742294559773, guid: c53a3c1f310f5834783d3c54000cb62f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1026217877}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26164e4f64226d94c82b989eeb3300e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2129343889
 GameObject:
   m_ObjectHideFlags: 0

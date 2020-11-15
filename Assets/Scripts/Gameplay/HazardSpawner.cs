@@ -24,22 +24,28 @@ public class HazardSpawner : MonoBehaviour {
 
     // Out of start
     private void Start() {
+        if(!DataUtility.gameData.isNetworkedGame){
+            GrowHazardPool(initialPoolSize);
+        }
+    }
+
+    public void StartRound(){
         if(DataUtility.gameData.isNetworkedGame){
            if(!PhotonNetwork.IsMasterClient) return;
            
             for(int i = 0; i < hazardSpawnPoints.Count; i ++){
                 var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), hazardSpawnPoints[i].position, Quaternion.identity);
                 hp.GetComponent<Hazard>().Initialize(this, hazardLevel, hazardSpawnPoints[i]);
+                hazards.Add(hp.GetComponent<Hazard>());
             }
         }
         else{
-            GrowHazardPool(initialPoolSize);
-
             for(int i = 0; i < hazardSpawnPoints.Count; i ++){
                 var h = GetPooledHazard();
                 h.Initialize(this, hazardLevel, hazardSpawnPoints[i]);
+                hazards.Add(h);
             }
-        }
+        } 
     }
 
     private Hazard GetPooledHazard(){
@@ -71,7 +77,10 @@ public class HazardSpawner : MonoBehaviour {
     }
 
     //TODO: Network this? spawn powerups
-    public void HazardDestroyed(int hl, Transform t, PlayerID player){
+    public void HazardDestroyed(int hl, Transform t, PlayerID player, Hazard hazard){
+
+        hazards.Remove(hazard);
+
         if(DataUtility.gameData.isNetworkedGame){
             if(hl == 1){
                 lvl1Destroyed++;
@@ -82,6 +91,7 @@ public class HazardSpawner : MonoBehaviour {
                     var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), t.position, Quaternion.identity);
                     hp.GetComponent<Hazard>().Initialize(this, hl - 1 , t, player, dir);
                     dir *= -1;
+                    hazards.Add(hp.GetComponent<Hazard>());
                 }
             }
 
@@ -91,6 +101,7 @@ public class HazardSpawner : MonoBehaviour {
                 var hp = PhotonNetwork.Instantiate(Path.Combine(pathRelativeToResources, prefabName), hazardSpawnPoints[pos].position, Quaternion.identity);
                 hp.GetComponent<Hazard>().Initialize(this, hazardLevel, hazardSpawnPoints[pos]);
                 lvl1Destroyed = 0;
+                hazards.Add(hp.GetComponent<Hazard>());
             } 
         }
         else{
@@ -103,6 +114,7 @@ public class HazardSpawner : MonoBehaviour {
                     var h = GetPooledHazard();
                     h.Initialize(this, hl - 1 , t, player, dir);
                     dir *= -1;
+                    hazards.Add(h);
                 }
             }
             
@@ -110,6 +122,7 @@ public class HazardSpawner : MonoBehaviour {
                 var h = GetPooledHazard();
                 h.Initialize(this, hazardLevel, hazardSpawnPoints[UnityEngine.Random.Range(0, hazardSpawnPoints.Count)]);
                 lvl1Destroyed = 0;
+                hazards.Add(h);
             }   
         }
     }
@@ -117,5 +130,17 @@ public class HazardSpawner : MonoBehaviour {
     public void Return(Hazard hazard)
     {
         hazardPool.Enqueue(hazard);
+    }
+
+    public void CleanAll(){
+        for(int i = hazards.Count -1; i >= 0; i--){
+            if(hazards[i] != null){
+                Destroy(hazards[i].gameObject);
+            }
+        }
+
+        hazards = new List<Hazard>();
+
+        lvl1Destroyed = 0;
     }
 }

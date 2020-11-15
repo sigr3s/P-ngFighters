@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Photon.Pun;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class GameController : MonoBehaviour {
     public Transform Player2Spawn;   
     private PlayerController player1;
     private PlayerController player2;
+    [SerializeField] private HazardSpawner hazardSpawner = null;
 
     [Header("Network")]
     string pathRelativeToResources = "PhotonPrefabs";
@@ -28,7 +30,7 @@ public class GameController : MonoBehaviour {
     [SerializeField] private Image player2SuperImage = null;
 
     // Round
-    private int currentRound = 1; // We asume a best of 3
+    private int currentRound = 0; // We asume a best of 3
     private int player1WonRounds = 0;
     private int player2WonRounds = 0;
     PhotonView photonView;
@@ -43,7 +45,7 @@ public class GameController : MonoBehaviour {
     {
         InstantiatePlayers();
         ResetHUD();
-        Debug.Log("Round 1, Fight!");
+        StartNewRound();
     }
 
 
@@ -90,10 +92,13 @@ public class GameController : MonoBehaviour {
         player1.health = 100.0f;
         player2.health = 100.0f;
         Debug.Log("Round "+currentRound+", Fight!");
+        hazardSpawner.StartRound();
     }
 
     public virtual void EndRound()
     {
+        hazardSpawner.CleanAll();
+
         if (player1.health <= 0.0f) {
             player2WonRounds++;
             Debug.Log("Player 2 won the round!");
@@ -122,6 +127,7 @@ public class GameController : MonoBehaviour {
     public virtual void GameFinished(int winnerId)
     {
         Debug.Log("Player "+(winnerId+1)+" won the game!!!");
+        SceneManager.LoadScene(0);
     }
 
     public virtual void OnUIShouldUpdate()
