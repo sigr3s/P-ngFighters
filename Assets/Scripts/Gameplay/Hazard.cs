@@ -80,6 +80,15 @@ public class Hazard : MonoBehaviour
 
         if (thrown) {
             transform.position += throwSpeed * Time.deltaTime;
+            hitCount = Physics.SphereCastNonAlloc(transform.position, transform.localScale.x * 0.5f, (prevPosition- transform.position).normalized, hits, 0f, mask, QueryTriggerInteraction.UseGlobal);
+
+            for(int i = 0; i < hitCount; i++){
+                var h = hits[i];
+                
+                if( Vertical == (Vertical | (1 << h.collider.gameObject.layer))){
+                    TryDestroyHazard(PlayerID.NP);
+                }
+            }
             return;
         }
 
