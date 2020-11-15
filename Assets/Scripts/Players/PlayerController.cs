@@ -125,7 +125,10 @@ public class PlayerController : MonoBehaviour
         _moveDirection.x = moveSpeed * move.x;
         _charaterController.Move(_moveDirection * Time.deltaTime);
         // Fire
-        if (m_FireAction.triggered) {
+        if(m_FireAction.triggered && throwHazard != null){
+            throwHazard.Throw( transform.forward.x > 0 ? false : true, playerID);
+        }
+        else if (m_FireAction.triggered && _charaterController.isGrounded) {
             if (_currentShot == null || !_currentShot.alive){
                 ShootProjectile();
             }
@@ -189,6 +192,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private Hazard throwHazard;
+
     private void OnTriggerEnter(Collider other) {
         //Damage, Powe UP
         if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
@@ -198,8 +203,6 @@ public class PlayerController : MonoBehaviour
                 
                 if(hazard.thrown){
                     float pix = m_MoveAction.ReadValue<Vector2>().x;
-
-                    Debug.Log($"{pix}   {hazard.throwSpeed.x}");
 
                     if( Mathf.Sign(hazard.throwSpeed.x) == Mathf.Sign(pix) && Mathf.Abs(pix) > 0.15f ){
                         hazard.Throw( transform.forward.x > 0 ? false : true, playerID);
@@ -214,10 +217,30 @@ public class PlayerController : MonoBehaviour
                     hazard.DestroyIfThrown();
                 }
             }
+            else if(hazard != null && hazard.hazardOwner != PlayerID.NP){
+                throwHazard = hazard;
+            }
         }
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerExit(Collider other) {
+        Hazard hazard = other.gameObject.GetComponent<Hazard>();
+
+        if(hazard != null && throwHazard == hazard){
+            StartCoroutine(ReserShootingHazard(hazard));
+        }
+    }
+
+    private IEnumerator ReserShootingHazard(Hazard h)
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        if(throwHazard == h){
+            throwHazard = null;
+        }
+    }
+
+    /*private void OnTriggerStay(Collider other) {
         //Damage, Powe UP
         if(!DataUtility.gameData.isNetworkedGame || photonView.IsMine) {
             Hazard hazard = other.gameObject.GetComponent<Hazard>();
@@ -225,7 +248,7 @@ public class PlayerController : MonoBehaviour
                 hazard.Throw( transform.forward.x > 0 ? false : true, playerID);
             }
         }
-    }
+    }*/
 
     private void SwitchOfInv()
     {
