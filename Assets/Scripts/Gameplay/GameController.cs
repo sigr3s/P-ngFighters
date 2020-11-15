@@ -45,11 +45,14 @@ public class GameController : MonoBehaviour {
     {
         InstantiatePlayers();
         ResetHUD();
-        StartNewRound();
+
+        if(!DataUtility.gameData.isNetworkedGame){
+            StartNewRound();
+        }
     }
 
 
-        private void OnDestroy()
+    private void OnDestroy()
     {
         player1.OnUIShouldUpdate -= OnUIShouldUpdate;
         player2.OnUIShouldUpdate -= OnUIShouldUpdate;
@@ -161,6 +164,10 @@ public class GameController : MonoBehaviour {
             {
                 player2 = playerController;
             }
+        }
+
+        if(player1 != null && player2 != null){
+            StartNewRound();
         }
     }
 }
